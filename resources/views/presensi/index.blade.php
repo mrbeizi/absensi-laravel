@@ -38,7 +38,11 @@
     </div>
     <div class="row">
         <div class="col">
+            @if($check > 0)
+            <button id="takeabsen" class="btn btn-info btn-block"><ion-icon name="camera"></ion-icon>Absen Pulang</button>
+            @else
             <button id="takeabsen" class="btn btn-primary btn-block"><ion-icon name="camera"></ion-icon>Absen Masuk</button>
+            @endif
         </div>
     </div>
     <div class="row">
@@ -100,10 +104,20 @@
             },
             cache:false,
             success: function(respond){
-                if(respond == 0){
-                    alert('success');
+                var status = respond.split('|');
+                if(status[0] == "success"){
+                    Swal.fire({
+                        title: 'Success!',
+                        text: status[1],
+                        icon: 'success'
+                    })
+                    setTimeout("location.href='/dashboard'",1500);
                 } else {
-                    alert('error');
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Sorry, data failed to save!',
+                        icon: 'error'
+                    })
                 }
             }
         })

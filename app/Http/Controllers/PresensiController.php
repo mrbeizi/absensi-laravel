@@ -11,7 +11,10 @@ class PresensiController extends Controller
 {
     public function index()
     {
-        return view('presensi.index');
+        $today = date('Y-m-d');
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $check = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();
+        return view('presensi.index', compact('check'));
     }
 
     public function store(Request $request)
@@ -29,20 +32,37 @@ class PresensiController extends Controller
         $fileName = $formatName.".png";
         $file = $folderPath.$fileName;
 
-        $data = [
-            'nik' => $nik,
-            'tgl_presensi' => $tgl_presensi,
-            'jam_in' => $jam,
-            'foto_in' => $fileName,
-            'location_in' => $lokasi
-        ];
+        
 
-        $save = DB::table('presensis')->insert($data);
-        if($save){
-            echo "0";
-            Storage::put($file,$image_base64);
+        $check = DB::table('presensis')->where([['tgl_presensi',$tgl_presensi],['nik',$nik]])->count();
+        if($check > 0){
+            $data_pulang = [
+                'jam_out' => $jam,
+                'foto_out' => $fileName,
+                'location_out' => $lokasi
+            ];
+            $post = DB::table('presensis')->where([['tgl_presensi',$tgl_presensi],['nik',$nik]])->update($data_pulang);
+            if($post){
+                echo "success|Good bye, take care!|out";
+                Storage::put($file,$image_base64);
+            } else {
+                echo "error|Oops, data failed to save!|out";
+            }
         } else {
-            echo "1";
+            $data_masuk = [
+                'nik' => $nik,
+                'tgl_presensi' => $tgl_presensi,
+                'jam_in' => $jam,
+                'foto_in' => $fileName,
+                'location_in' => $lokasi
+            ];
+            $post = DB::table('presensis')->insert($data_masuk);
+            if($post){
+                echo "success|Thank you, happy working!|in";
+                Storage::put($file,$image_base64);
+            } else {
+                echo "error|Oops, data failed to save!|in";
+            }
         }
 
     }
