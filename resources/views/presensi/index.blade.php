@@ -50,11 +50,15 @@
             <div id="map"></div>
         </div>
     </div>
+    <audio type="audio/mpeg" id="notif_in" src="{{asset('assets/audio/in.mp3')}}"></audio>
+    <audio type="audio/mpeg" id="notif_out" src="{{asset('assets/audio/out.mp3')}}"></audio>
     
 @endsection
 
 @push('myscript')
 <script>
+    var notif_in = document.getElementById('notif_in');
+    var notif_out = document.getElementById('notif_out');
     Webcam.set({
         height:480,
         width:640,
@@ -106,12 +110,17 @@
             success: function(respond){
                 var status = respond.split('|');
                 if(status[0] == "success"){
+                    if(status[2] == "in"){
+                        notif_in.play();
+                    } else {
+                        notif_out.play();
+                    }
                     Swal.fire({
                         title: 'Success!',
                         text: status[1],
                         icon: 'success'
                     })
-                    setTimeout("location.href='/dashboard'",1500);
+                    setTimeout("location.href='/dashboard'",2500);
                 } else {
                     Swal.fire({
                         title: 'Error!',
