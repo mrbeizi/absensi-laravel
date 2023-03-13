@@ -52,6 +52,7 @@
     </div>
     <audio type="audio/mpeg" id="notif_in" src="{{asset('assets/audio/in.mp3')}}"></audio>
     <audio type="audio/mpeg" id="notif_out" src="{{asset('assets/audio/out.mp3')}}"></audio>
+    <audio type="audio/mpeg" id="notif_radius" src="{{asset('assets/audio/radius.mp3')}}"></audio>
     
 @endsection
 
@@ -59,6 +60,8 @@
 <script>
     var notif_in = document.getElementById('notif_in');
     var notif_out = document.getElementById('notif_out');
+    var notif_radius = document.getElementById('notif_radius');
+
     Webcam.set({
         height:480,
         width:640,
@@ -81,11 +84,11 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-        var circle = L.circle([position.coords.latitude, position.coords.longitude], {
+        var circle = L.circle([1.1281765,104.0332504], {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
-            radius: 20
+            radius: 110
         }).addTo(map);
     }
 
@@ -122,9 +125,12 @@
                     })
                     setTimeout("location.href='/dashboard'",2500);
                 } else {
+                    if(status[2] == "radius"){
+                        notif_radius.play();
+                    }
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Sorry, data failed to save!',
+                        text: status[1],
                         icon: 'error'
                     })
                 }

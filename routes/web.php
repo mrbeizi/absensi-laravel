@@ -29,4 +29,8 @@ Route::middleware(['auth:karyawan'])->group(function(){
     Route::get('/proses-logout',[AuthController::class,'prosesLogout'])->name('proses-logout');
     Route::get('/camera',[PresensiController::class,'index'])->name('camera');
     Route::post('/camera-snap',[PresensiController::class,'store'])->name('camera-snap');
+
+    # edit profile
+    Route::get('/edit-profile',[PresensiController::class,'editProfile'])->name('edit-profile');
+    Route::post('/update/{nik}/profile',[PresensiController::class,'updateProfile']);
 });

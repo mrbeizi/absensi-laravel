@@ -27,7 +27,7 @@
             <strong>Docs</strong>
         </div>
     </a>
-    <a href="javascript:;" class="item">
+    <a href="{{route('edit-profile')}}" class="item {{request()->is('edit-profile') ? 'active' : ''}}">
         <div class="col">
             <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="people outline"></ion-icon>
             <strong>Profile</strong>
