@@ -154,4 +154,26 @@ class PresensiController extends Controller
             return redirect()->back()->with(['error' => 'Data gagal diubah!']);
         }
     }
+
+    public function history()
+    {
+        $monthName = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+        return view('presensi.history', compact('monthName'));
+    }
+
+    public function getHistory(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nik = Auth::guard('karyawan')->user()->nik;
+
+        $history = DB::table('presensis')
+            ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
+            ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
+            ->where('nik',$nik)
+            ->orderBy('tgl_presensi')
+            ->get();
+
+        return view('presensi.get-history', compact('history'));
+    }
 }

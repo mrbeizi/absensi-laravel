@@ -6,11 +6,10 @@
             <strong>Home</strong>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="{{route('presensi-history')}}" class="item {{request()->is('presensi-history') ? 'active' : ''}}">
         <div class="col">
-            <ion-icon name="calendar-outline" role="img" class="md hydrated"
-                aria-label="calendar outline"></ion-icon>
-            <strong>Calendar</strong>
+            <ion-icon name="calendar-number-outline"></ion-icon>
+            <strong>History</strong>
         </div>
     </a>
     <a href="{{route('camera')}}" class="item">
@@ -22,8 +21,7 @@
     </a>
     <a href="#" class="item">
         <div class="col">
-            <ion-icon name="document-text-outline" role="img" class="md hydrated"
-                aria-label="document text outline"></ion-icon>
+            <ion-icon name="document-text-outline" role="img" class="md hydrated" aria-label="document text outline"></ion-icon>
             <strong>Docs</strong>
         </div>
     </a>
