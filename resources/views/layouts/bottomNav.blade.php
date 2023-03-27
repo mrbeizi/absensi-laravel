@@ -19,10 +19,10 @@
             </div>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="{{route('presensi-izin')}}" class="item {{request()->is('presensi-izin') ? 'active' : ''}}">
         <div class="col">
             <ion-icon name="document-text-outline" role="img" class="md hydrated" aria-label="document text outline"></ion-icon>
-            <strong>Docs</strong>
+            <strong>Izin</strong>
         </div>
     </a>
     <a href="{{route('edit-profile')}}" class="item {{request()->is('edit-profile') ? 'active' : ''}}">

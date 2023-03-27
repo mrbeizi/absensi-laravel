@@ -16,6 +16,7 @@
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
     <!-- Base Js File -->
     <script src="{{asset('assets/js/base.js')}}"></script>
 
