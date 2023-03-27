@@ -28,6 +28,30 @@
             @endif
         </div>        
     </div>
+    @foreach($datas as $data)
+    <div class="row">
+        <div class="col ml-2 mr-2">
+            <ul class="listview image-listview">
+                <li>
+                    <div class="item">
+                        <div class="in">
+                            <div><b>{{date('d-m-Y',strtotime($data->tgl_izin))}}</b> ({{$data->status == "s" ? "Sakit" : "Izin"}})</br>
+                                <small class="text-muted">{{$data->keterangan}}</small>
+                            </div>
+                            @if($data->status_approved == 0)
+                            <span class="badge badge-warning">Pending</span>
+                            @elseif($data->status_approved == 1)
+                            <span class="badge badge-success">Approved</span>
+                            @else
+                            <span class="badge badge-danger">Rejected</span>
+                            @endif
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    @endforeach
     <div class="fab-button bottom-right" style="margin-bottom:70px">
         <a href="{{route('create-izin')}}" class="fab">
             <ion-icon name="add-outline"></ion-icon>

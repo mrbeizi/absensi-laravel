@@ -5,6 +5,10 @@
     .datepicker {
         font-size: 1em;
     }
+
+    table.table-condensed{
+        margin-top: 20px !important;
+    }
     /* solution 2: the original datepicker use 20px so replace with the following:*/
     
     .datepicker td, .datepicker th {
