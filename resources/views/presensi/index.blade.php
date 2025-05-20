@@ -84,7 +84,7 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-        var circle = L.circle([1.1281765,104.0332504], {
+        var circle = L.circle([1.141649,104.042440], {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,

@@ -27,7 +27,7 @@
                 <div class="list-menu">
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="green" style="font-size: 40px;">
+                            <a href="{{route('edit-profile')}}" class="green" style="font-size: 40px;">
                                 <ion-icon name="person-sharp"></ion-icon>
                             </a>
                         </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="danger" style="font-size: 40px;">
+                            <a href="{{route('presensi-izin')}}" class="danger" style="font-size: 40px;">
                                 <ion-icon name="calendar-number"></ion-icon>
                             </a>
                         </div>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="warning" style="font-size: 40px;">
+                            <a href="{{route('presensi-history')}}" class="warning" style="font-size: 40px;">
                                 <ion-icon name="document-text"></ion-icon>
                             </a>
                         </div>
@@ -133,7 +133,7 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 10px 8px !important; line-height:0.8rem;">
-                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">0</span>
+                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">@if($recapIzin->jmlizin == 0) 0 @else{{$recapIzin->jmlizin}} @endif</span>
                             <ion-icon name="remove-circle" style="font-size: 1.4rem" class="text-primary"></ion-icon><br>
                             <span style="font-size: 0.5rem">Izin</span>
                         </div>
@@ -142,7 +142,7 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 10px 8px !important; line-height:0.8rem;">
-                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">0</span>
+                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">@if($recapIzin->jmlsakit == 0) 0 @else {{$recapIzin->jmlsakit}} @endif</span>
                             <ion-icon name="sad" style="font-size: 1.4rem" class="text-warning"></ion-icon><br>
                             <span style="font-size: 0.5rem">Sakit</span>
                         </div>
