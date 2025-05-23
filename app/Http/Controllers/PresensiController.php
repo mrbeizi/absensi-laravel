@@ -43,8 +43,8 @@ class PresensiController extends Controller
         $file         = $folderPath.$fileName;
 
         # Data Radius
-        $latOffice  = 1.1281765;
-        $longOffice = 104.0332504;
+        $latOffice  = 1.141649;
+        $longOffice = 104.042440;
         $locUser    = explode(",",$lokasi);
         $latUser    = $locUser[0]; 
         $longUser   = $locUser[1];
@@ -53,7 +53,7 @@ class PresensiController extends Controller
         $radius = round($dis["meters"]);        
 
         # Check radius
-        if($radius > 120){
+        if($radius > 110){
             echo "error|Sorry, you're out of radius ".$radius." meters|radius";
         } else {
             # Check data exist or not

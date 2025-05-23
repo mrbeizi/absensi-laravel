@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +23,33 @@ Route::middleware(['guest:karyawan'])->group(function(){
     Route::get('/', function () {
         return view('auth.login');
     })->name('login');    
-    Route::post('/proses-login',[AuthController::class,'prosesLogin'])->name('proses-login');
+    Route::post('/proses-login',[AuthController::class,'prosesLogin'])->name('proses-login');    
+});
+
+Route::middleware(['guest:user'])->group(function(){
+    Route::get('/panel', function () {
+        return view('auth.loginadmin');
+    })->name('loginadmin');   
+    Route::post('/proses-login-admin',[AuthController::class,'prosesLoginAdmin'])->name('proses-login-admin');
+});
+
+Route::middleware(['auth:user'])->group(function(){
+    Route::get('/proses-logout-admin',[AuthController::class,'prosesLogoutAdmin'])->name('proses-logout-admin');
+    Route::get('/panel/dashboardadmin', [DashboardController::class,'dashboardadmin'])->name('dashboardadmin');
+
+    // Karyawan
+    Route::get('/karyawan',[KaryawanController::class, 'index'])->name('index-karyawan');
+    Route::post('/karyawan/store',[KaryawanController::class,'simpan']);
+    Route::post('/karyawan/edit',[KaryawanController::class,'edit']);
+    Route::post('/karyawan/{nik}/update',[KaryawanController::class,'update']);
+    Route::post('/karyawan/{nik}/destroy',[KaryawanController::class,'destroy']);
+
+    // Department
+    Route::get('/department',[DepartmentController::class, 'index'])->name('index-department');
+    Route::post('/department/store',[DepartmentController::class,'simpan']);
+    Route::post('/department/edit',[DepartmentController::class,'edit']);
+    Route::post('/department/{kode_dept}/update',[DepartmentController::class,'update']);
+    Route::post('/department/{kode_dept}/destroy',[DepartmentController::class,'destroy']);
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){
