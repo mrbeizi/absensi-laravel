@@ -13,7 +13,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Sign in with illustration - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <title>Sign In</title>
     <!-- CSS files -->
     <link href="{{asset('tabler/dist/css/tabler.min.css?1668287865')}}" rel="stylesheet"/>
     <link href="{{asset('tabler/dist/css/tabler-flags.min.css?1668287865')}}" rel="stylesheet"/>
@@ -40,6 +40,11 @@
               <div class="card card-md">
                 <div class="card-body">
                   <h2 class="h2 text-center mb-4">Login to your account</h2>
+                  @if(Session::get('warning'))
+                  <div class="alert alert-warning">
+                    <p>{{Session::get('warning')}}</p>
+                  </div>
+                  @endif
                   <form action="{{route('proses-login-admin')}}" method="post" autocomplete="off" novalidate>
                     @csrf
                     <div class="mb-3">
