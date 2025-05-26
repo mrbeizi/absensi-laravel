@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Karyawan;
 use Auth;
 use DB;
 
@@ -157,7 +158,7 @@ class PresensiController extends Controller
 
     public function history()
     {
-        $monthName = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+        $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         return view('presensi.history', compact('monthName'));
     }
 
@@ -231,5 +232,28 @@ class PresensiController extends Controller
             ->join('karyawans','presensis.nik','=','karyawans.nik')
             ->first();
         return view('administrator.monitoring.showmap', compact('presensi'));
+    }
+
+    public function laporan(Request $request)
+    {
+        $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        $karyawan = Karyawan::orderBy('nama_lengkap')->get();
+        return view('administrator.laporan.index', compact('monthName','karyawan'));
+    }
+
+    public function cetaklaporan(Request $request)
+    {
+        $nik = $request->nik;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        $karyawan = Karyawan::where('nik',$nik)->join('departments','departments.kode_dept','=','karyawans.kode_dept')->first();
+        $presensi = DB::table('presensis')->where('nik',$nik)
+            ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
+            ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
+            ->orderBy('tgl_presensi')
+            ->get();
+
+        return view('administrator.laporan.cetaklaporan', compact('bulan','tahun','monthName','karyawan','presensi'));
     }
 }
