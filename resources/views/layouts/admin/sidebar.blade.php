@@ -67,7 +67,7 @@
                   <a href="{{route('laporan-presensi')}}" class="dropdown-item">
                     Presensi
                   </a>
-                  <a href="#" class="dropdown-item">
+                  <a href="{{route('rekap-presensi')}}" class="dropdown-item">
                     Rekap Presensi
                   </a>
                 </div>
