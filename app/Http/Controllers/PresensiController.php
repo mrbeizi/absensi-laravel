@@ -16,7 +16,8 @@ class PresensiController extends Controller
         $today = date('Y-m-d');
         $nik   = Auth::guard('karyawan')->user()->nik;
         $check = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();
-        return view('presensi.index', compact('check'));
+        $office_loc = DB::table('konfigurasi_lokasis')->where('id',1)->first();
+        return view('presensi.index', compact('check','office_loc'));
     }
 
     public function store(Request $request)
@@ -44,8 +45,11 @@ class PresensiController extends Controller
         $file         = $folderPath.$fileName;
 
         # Data Radius
-        $latOffice  = 1.141649;
-        $longOffice = 104.042440;
+        $office_loc = DB::table('konfigurasi_lokasis')->where('id',1)->first();
+        $exp_office_loc = explode(",",$office_loc);
+        $latOffice  = $exp_office_loc[0];
+        $longOffice = $exp_office_loc[1];
+
         $locUser    = explode(",",$lokasi);
         $latUser    = $locUser[0]; 
         $longUser   = $locUser[1];
@@ -54,7 +58,7 @@ class PresensiController extends Controller
         $radius = round($dis["meters"]);        
 
         # Check radius
-        if($radius > 110){
+        if($radius > $office_loc->radius){
             echo "error|Sorry, you're out of radius ".$radius." meters|radius";
         } else {
             # Check data exist or not

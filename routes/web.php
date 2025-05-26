@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\KonfigurasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,10 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('cetaklaporan-presensi',[PresensiController::class, 'cetaklaporan'])->name('cetaklaporan-presensi');
     Route::get('rekap-presensi',[PresensiController::class, 'rekap'])->name('rekap-presensi');
     Route::post('cetakrekap-presensi',[PresensiController::class, 'cetakrekap'])->name('cetakrekap-presensi');
+
+    // Konfigurasi
+    Route::get('lokasi-kantor',[KonfigurasiController::class, 'lokasikantor'])->name('lokasi-kantor');
+    Route::post('update-lokasi-kantor',[KonfigurasiController::class, 'updatelokasikantor'])->name('update-lokasi-kantor');
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){
