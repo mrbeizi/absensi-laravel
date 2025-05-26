@@ -20,6 +20,8 @@
     <link href="{{asset('tabler/dist/css/tabler-payments.min.css?1668287865')}}" rel="stylesheet"/>
     <link href="{{asset('tabler/dist/css/tabler-vendors.min.css?1668287865')}}" rel="stylesheet"/>
     <link href="{{asset('tabler/dist/css/demo.min.css?1668287865')}}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
       @import url('https://rsms.me/inter/inter.css');
       :root {
@@ -49,6 +51,8 @@
     <script src="{{asset('tabler/dist/js/tabler.min.js?1668287865')}}" defer></script>
     <script src="{{asset('tabler/dist/js/demo.min.js?1668287865')}}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     @stack('myscript')
   </body>
 </html>

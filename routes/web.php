@@ -50,6 +50,11 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/department/edit',[DepartmentController::class,'edit']);
     Route::post('/department/{kode_dept}/update',[DepartmentController::class,'update']);
     Route::post('/department/{kode_dept}/destroy',[DepartmentController::class,'destroy']);
+
+    // Presensi Monitoring
+    Route::get('presensi-monitoring',[PresensiController::class,'monitoring'])->name('presensi-monitoring');
+    Route::post('get-presensi',[PresensiController::class,'getpresensi'])->name('get-presensi');
+    Route::post('tampilkan-peta',[PresensiController::class,'tampilkanpeta'])->name('tampilkan-peta');
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){

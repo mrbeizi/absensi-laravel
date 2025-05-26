@@ -205,4 +205,31 @@ class PresensiController extends Controller
             return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
         }
     }
+
+    // Presensi Monitoring
+    public function monitoring(Request $request)
+    {
+        return view('administrator.monitoring.index');
+    }
+
+    public function getpresensi(Request $request)
+    {
+        $tanggal = $request->tanggal;
+        $presensi = DB::table('presensis')->select('presensis.*','nama_lengkap','nama_dept')
+        ->join('karyawans','karyawans.nik','=','presensis.nik')
+        ->join('departments','karyawans.kode_dept','=','departments.kode_dept')
+        ->where('tgl_presensi',$tanggal)
+        ->get();
+
+        return view('administrator.monitoring.getpresensi', compact('presensi'));
+    }
+
+    public function tampilkanpeta(Request $request)
+    {
+        $id = $request->id;
+        $presensi = DB::table('presensis')->where('id',$id)
+            ->join('karyawans','presensis.nik','=','karyawans.nik')
+            ->first();
+        return view('administrator.monitoring.showmap', compact('presensi'));
+    }
 }
