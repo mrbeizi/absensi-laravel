@@ -63,6 +63,12 @@ Route::middleware(['auth:user'])->group(function(){
     Route::get('rekap-presensi',[PresensiController::class, 'rekap'])->name('rekap-presensi');
     Route::post('cetakrekap-presensi',[PresensiController::class, 'cetakrekap'])->name('cetakrekap-presensi');
 
+    // Izin Sakit Cuti
+    Route::get('data-pengajuan-izin',[PresensiController::class, 'dataizinsakit'])->name('data-izinsakit');
+    Route::post('approve-izinsakit',[PresensiController::class, 'approveizinsakit'])->name('approve-izinsakit');
+    Route::get('presensi/{id}/batalkanizinsakit',[PresensiController::class,'batalkanizinsakit']);
+    
+
     // Konfigurasi
     Route::get('lokasi-kantor',[KonfigurasiController::class, 'lokasikantor'])->name('lokasi-kantor');
     Route::post('update-lokasi-kantor',[KonfigurasiController::class, 'updatelokasikantor'])->name('update-lokasi-kantor');
@@ -86,4 +92,6 @@ Route::middleware(['auth:karyawan'])->group(function(){
     Route::get('/presensi-izin',[PresensiController::class,'izin'])->name('presensi-izin');
     Route::get('/presensi-izin/create',[PresensiController::class,'createizin'])->name('create-izin');
     Route::post('/presensi-izin/store',[PresensiController::class,'storeizin'])->name('store-izin');
+
+    Route::post('cekdata-pengajuan-izin',[PresensiController::class, 'cekdatapengajuanizin'])->name('cekdata-pengajuan-izin');
 });

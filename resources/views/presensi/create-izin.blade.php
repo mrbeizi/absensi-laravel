@@ -65,6 +65,30 @@
     });
     $('#datepicker').datepicker("setDate", new Date());
 
+    $('#tgl_izin').change(function(e){
+        var tglizin = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "{{route('cekdata-pengajuan-izin')}}",
+            data:{
+                _token: "{{ csrf_token() }}",
+                tgl_izin: tglizin
+            },
+            cache: false,
+            success:function(respond){
+                if(respond == 1){
+                    Swal.fire({
+                        title: 'Oops!',
+                        text: 'Anda sudah mengajukan izin pada tanggal tersebut!',
+                        icon: 'warning'
+                    }).then((result) => {
+                        $('#tgl_izin').val("");
+                    });
+                }
+            }
+        });
+    });
+
     $('#formIzin').submit(function(){
         var tgl_izin = $('#tgl_izin').val();
         var status = $('#status').val();
