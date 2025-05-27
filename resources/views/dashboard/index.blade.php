@@ -1,8 +1,22 @@
 @extends('layouts.resources')
 
 @section('content')
-
+<style>
+    .logout {
+        position: absolute;
+        color: white;
+        font-size: 30px;
+        right: 20px;
+        top: 40px;
+    }
+    .logout:hover {
+        color: white;
+    }
+</style>
     <div class="section" id="user-section">
+        <a href="{{route('proses-logout')}}" class="logout">
+            <ion-icon name="exit-outline"></ion-icon>
+        </a>
         <div id="user-detail">
             <div class="avatar">
                 @if(!empty(Auth::guard('karyawan')->user()->foto))

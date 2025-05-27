@@ -67,8 +67,10 @@ class KaryawanController extends Controller
                 return redirect()->back()->with(['success' => 'Data berhasil disimpan']);
             }
         } catch (\Exception $e) {
-            // dd($e);
-            return redirect()->back()->with(['warning' => 'Data gagal disimpan']);
+            if($e->getCode() == 23000) {
+                $message = "NIK ".$nik." sudah ada";
+            }
+            return redirect()->back()->with(['warning' => 'Data gagal disimpan. '. $message]);
         }
     }
 
