@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DepartmentSeeder::class,
             CabangSeeder::class,
-            KaryawanSeeder::class
+            KaryawanSeeder::class,
+            JamKerjaSeeder::class,
+            LokasiKantorSeeder::class,
         ]);
     }
 }

@@ -80,6 +80,12 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/kantorcabang/edit',[KantorCabangController::class,'edit']);
     Route::post('/kantorcabang/{kode_cabang}/update',[KantorCabangController::class,'update']);
     Route::post('/kantorcabang/{kode_cabang}/destroy',[KantorCabangController::class,'destroy']);
+
+    // Jam Kerja
+    Route::get('/jamkerja',[KonfigurasiController::class,'jamkerja'])->name('jam-kerja');
+    Route::post('/jamkerja/store',[KonfigurasiController::class,'simpanjamkerja']);
+    Route::post('/jamkerja/edit',[KonfigurasiController::class,'editjamkerja']);
+    Route::post('/jamkerja/{kode_jamker}/destroy',[KonfigurasiController::class,'destroyjamker']);
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){
