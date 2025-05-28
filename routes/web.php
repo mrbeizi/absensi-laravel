@@ -8,6 +8,7 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KonfigurasiController;
+use App\Http\Controllers\KantorCabangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,13 @@ Route::middleware(['auth:user'])->group(function(){
     // Konfigurasi
     Route::get('lokasi-kantor',[KonfigurasiController::class, 'lokasikantor'])->name('lokasi-kantor');
     Route::post('update-lokasi-kantor',[KonfigurasiController::class, 'updatelokasikantor'])->name('update-lokasi-kantor');
+
+    // Kantor Cabang
+    Route::get('/kantorcabang',[KantorCabangController::class, 'index'])->name('index-kantorcabang');
+    Route::post('/kantorcabang/store',[KantorCabangController::class,'simpan']);
+    Route::post('/kantorcabang/edit',[KantorCabangController::class,'edit']);
+    Route::post('/kantorcabang/{kode_cabang}/update',[KantorCabangController::class,'update']);
+    Route::post('/kantorcabang/{kode_cabang}/destroy',[KantorCabangController::class,'destroy']);
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){
