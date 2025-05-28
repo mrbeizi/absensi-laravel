@@ -51,7 +51,12 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="form-group">
-                                                <input type="text" name="kode_cabang" class="form-control" placeholder="Kode Cabang" value="{{ Request('kode_cabang') }}">
+                                                <select name="kd_cabang" id="kd_cabang" class="form-select">
+                                                    <option value="">Semua Cabang</option>
+                                                    @foreach($datakacab as $item)
+                                                    <option value="{{$item->kode_cabang}}">{{$item->nama_cabang}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-2">
@@ -83,7 +88,7 @@
                                             <td>{{$item->kode_cabang}}</td>
                                             <td>{{$item->nama_cabang}}</td>
                                             <td>{{$item->lokasi_kantor}}</td>
-                                            <td>{{$item->radius}}</td>
+                                            <td>{{$item->radius}} Meter</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="#" class="edit text-success" kodecabang="{{$item->kode_cabang}}">
@@ -147,7 +152,7 @@
                                 <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-radar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 12h-8a1 1 0 1 0 -1 1v8a9 9 0 0 0 9 -9" /><path d="M16 9a5 5 0 1 0 -7 7" /><path d="M20.486 9a9 9 0 1 0 -11.482 11.495" /></svg>
                             </span>
-                            <input type="text" value="" name="radius" id="radius" class="form-control" placeholder="Radius">
+                            <input type="text" value="" name="radius" id="radius" class="form-control" placeholder="Radius (m)">
                         </div>                        
                         <div class="form-group">
                             <button class="btn btn-primary float-end"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>simpan</button>

@@ -9,8 +9,14 @@ class KantorCabangController extends Controller
 {
     public function index(Request $request)
     {
-        $kantorcabang = Cabang::get();
-        return view('administrator.kantor-cabang.index', compact('kantorcabang'));
+        $query = Cabang::query();
+        if(!empty($request->kd_cabang)){
+            $kantorcabang = $query->where('kode_cabang',$request->kd_cabang);
+        }
+        $kantorcabang = $query->get();
+
+        $datakacab = Cabang::all();
+        return view('administrator.kantor-cabang.index', compact('kantorcabang','datakacab'));
     }
     public function simpan(Request $request)
     {
