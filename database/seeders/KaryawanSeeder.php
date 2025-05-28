@@ -24,7 +24,9 @@ class KaryawanSeeder extends Seeder
                 'kode_dept' => 'FIN',
                 'kode_cabang' => 'SMA',
                 'password' => bcrypt('123456'),
-                'remember_token' => ''
+                'remember_token' => '',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'nik' => '123457',
@@ -34,7 +36,9 @@ class KaryawanSeeder extends Seeder
                 'kode_dept' => 'IT',
                 'kode_cabang' => 'UV',
                 'password' => bcrypt('123457'),
-                'remember_token' => ''
+                'remember_token' => '',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ];
         Karyawan::insert($record);

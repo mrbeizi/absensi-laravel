@@ -19,14 +19,18 @@ class CabangSeeder extends Seeder
             [
                 'kode_cabang' => 'SMA',
                 'nama_cabang' => 'SMA Maitreyawira',
-                'lokasi_kantor' => '1.141649,104.042440',
-                'radius' => '20'
+                'lokasi_kantor' => '1.1283746652061433,104.03316548704528',
+                'radius' => '20',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'kode_cabang' => 'UV',
                 'nama_cabang' => 'Universitas Universal',
                 'lokasi_kantor' => '1.141649,104.042440',
-                'radius' => '20'
+                'radius' => '20',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ];
         Cabang::insert($record);

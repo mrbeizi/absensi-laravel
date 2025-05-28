@@ -18,19 +18,27 @@ class DepartmentSeeder extends Seeder
         $record = [
             [
                 'kode_dept' => 'FIN',
-                'nama_dept' => 'Finance'
+                'nama_dept' => 'Finance',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'kode_dept' => 'HRD',
-                'nama_dept' => 'Human Resource Development'
+                'nama_dept' => 'Human Resource Development',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'kode_dept' => 'IT',
-                'nama_dept' => 'Information Technology'
+                'nama_dept' => 'Information Technology',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'kode_dept' => 'WRH',
-                'nama_dept' => 'Warehouse'
+                'nama_dept' => 'Warehouse',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ];
         Department::insert($record);

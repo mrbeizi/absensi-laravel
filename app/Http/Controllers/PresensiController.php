@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Karyawan;
+use App\Models\Cabang;
 use App\Models\PengajuanIzin;
 use Auth;
 use DB;
@@ -17,13 +18,15 @@ class PresensiController extends Controller
         $today = date('Y-m-d');
         $nik   = Auth::guard('karyawan')->user()->nik;
         $check = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();
-        $office_loc = DB::table('konfigurasi_lokasis')->where('id',1)->first();
+        $kode_cabang   = Auth::guard('karyawan')->user()->kode_cabang;
+        $office_loc = Cabang::where('kode_cabang',$kode_cabang)->first();
         return view('presensi.index', compact('check','office_loc'));
     }
 
     public function store(Request $request)
     {
         $nik          = Auth::guard('karyawan')->user()->nik;
+        $kode_cabang  = Auth::guard('karyawan')->user()->kode_cabang;
         $tgl_presensi = date('Y-m-d');
         $jam          = date('H:i:s');
         $lokasi       = $request->lokasi;
@@ -46,8 +49,8 @@ class PresensiController extends Controller
         $file         = $folderPath.$fileName;
 
         # Data Radius
-        $office_loc = DB::table('konfigurasi_lokasis')->where('id',1)->first();
-        $exp_office_loc = explode(",",$office_loc);
+        $office_loc = Cabang::where('kode_cabang',$kode_cabang)->first();
+        $exp_office_loc = explode(",",$office_loc->lokasi_kantor);
         $latOffice  = $exp_office_loc[0];
         $longOffice = $exp_office_loc[1];
 
