@@ -49,12 +49,12 @@
                             <div class="col-12">
                                 <form action="{{route('index-karyawan')}}" method="GET">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-3">
                                             <div class="form-group">
                                                 <input type="text" name="nama_lengkap" class="form-control" placeholder="Nama Karyawan" value="{{ Request('nama_lengkap') }}">
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-3">
                                             <div class="form-group">
                                                 <select name="kode_dept" id="kode_dept" class="form-select">
                                                     <option value="">-- Pilih Department --</option>
@@ -64,9 +64,19 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg> Cari</button>
+                                                <select name="kd_cabang" id="kd_cabang" class="form-select">
+                                                    <option value="">-- Pilih Kantor --</option>
+                                                    @foreach($datacabang as $cab)
+                                                    <option {{ Request('kd_cabang') == $cab->kode_cabang ? 'selected' : '' }} value="{{ $cab->kode_cabang }}">{{ $cab->nama_cabang }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg> Cari data</button>
                                             </div>
                                         </div>
                                     </div>
@@ -85,6 +95,7 @@
                                             <th>No HP</th>
                                             <th>Foto</th>
                                             <th>Departemen</th>
+                                            <th>Kantor</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -107,6 +118,7 @@
                                                 @endif
                                             </td>
                                             <td>{{$item->nama_dept}}</td>
+                                            <td>{{$item->nama_cabang}}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="#" class="edit text-success" nik="{{$item->nik}}">
@@ -183,6 +195,14 @@
                                 <option value="">- Pilih Department -</option>
                                 @foreach($department as $dept)
                                     <option {{ Request('kode_dept') == $dept->kode_dept ? 'selected' : '' }} value="{{ $dept->kode_dept }}">{{ $dept->nama_dept }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                <option value="">- Pilih Kantor -</option>
+                                @foreach($datacabang as $cab)
+                                    <option {{ Request('kode_cabang') == $cab->kode_cabang ? 'selected' : '' }} value="{{ $cab->kode_cabang }}">{{ $cab->nama_cabang }}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -15,13 +15,28 @@ class KaryawanSeeder extends Seeder
      */
     public function run()
     {
-        Karyawan::create([
-            'nik' => '123456',
-            'nama_lengkap' => 'Su Jia Jie',
-            'jabatan' => 'Staf SIPK',
-            'no_telp' => '081122334455',
-            'password' => bcrypt('123456'),
-            'remember_token' => '',
-        ]);
+        $record = [
+            [
+                'nik' => '123456',
+                'nama_lengkap' => 'Andrew',
+                'jabatan' => 'Staf SIPK',
+                'no_telp' => '081122334455',
+                'kode_dept' => 'FIN',
+                'kode_cabang' => 'SMA',
+                'password' => bcrypt('123456'),
+                'remember_token' => ''
+            ],
+            [
+                'nik' => '123457',
+                'nama_lengkap' => 'Beibei',
+                'jabatan' => 'Staf SIPK',
+                'no_telp' => '08198575',
+                'kode_dept' => 'IT',
+                'kode_cabang' => 'UV',
+                'password' => bcrypt('123457'),
+                'remember_token' => ''
+            ]
+        ];
+        Karyawan::insert($record);
     }
 }

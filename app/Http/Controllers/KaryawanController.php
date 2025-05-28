@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Karyawan;
+use App\Models\Cabang;
 use DB;
 use Auth;
 
@@ -14,8 +15,9 @@ class KaryawanController extends Controller
     public function index(Request $request)
     {
         $query = Karyawan::query();
-        $query->select('karyawans.*','nama_dept');
+        $query->select('karyawans.*','nama_dept','nama_cabang');
         $query->join('departments','karyawans.kode_dept','=','departments.kode_dept');
+        $query->join('cabangs','karyawans.kode_cabang','=','cabangs.kode_cabang');
         $query->orderBy('nama_lengkap');
 
         if(!empty($request->nama_lengkap)){
@@ -26,10 +28,15 @@ class KaryawanController extends Controller
             $query->where('karyawans.kode_dept', $request->kode_dept);
         }
 
+        if(!empty($request->kd_cabang)){
+            $query->where('cabangs.kode_cabang', $request->kd_cabang);
+        }
+
         $karyawan = $query->paginate(10);
         
         $department = DB::table('departments')->orderBy('nama_dept','ASC')->get();
-        return view('administrator.karyawan.index', compact('karyawan','department'));
+        $datacabang = Cabang::orderBy('nama_cabang')->get();
+        return view('administrator.karyawan.index', compact('karyawan','department','datacabang'));
     }
 
     public function simpan(Request $request)
@@ -39,6 +46,7 @@ class KaryawanController extends Controller
         $jabatan = $request->jabatan;
         $no_telp = $request->no_telp;
         $kode_dept = $request->kode_dept;
+        $kode_cabang = $request->kode_cabang;
 
         if($request->hasFile('foto')){
             $foto = $nik.".".$request->file('foto')->getClientOriginalExtension();
@@ -53,6 +61,7 @@ class KaryawanController extends Controller
                 'jabatan' => $jabatan,
                 'no_telp' => $no_telp,
                 'kode_dept' => $kode_dept,
+                'kode_cabang' => $kode_cabang,
                 'password' => Hash::make($nik), # create default password
                 'foto' => $foto,
                 'created_at' => now(),
@@ -78,9 +87,10 @@ class KaryawanController extends Controller
     {
         $nik = $request->nik;
         $department = DB::table('departments')->orderBy('nama_dept','ASC')->get();
+        $datacabang = Cabang::orderBy('nama_cabang','ASC')->get();
 
         $karyawan = Karyawan::where('nik',$nik)->first();
-        return view('administrator.karyawan.edit', compact('department','karyawan'));
+        return view('administrator.karyawan.edit', compact('department','datacabang','karyawan'));
     }
 
     public function update($nik, Request $request)
@@ -90,6 +100,7 @@ class KaryawanController extends Controller
         $jabatan = $request->jabatan;
         $no_telp = $request->no_telp;
         $kode_dept = $request->kode_dept;
+        $kode_cabang = $request->kode_cabang;
 
         $old_foto = $request->old_foto;
         if($request->hasFile('foto')){
@@ -104,6 +115,7 @@ class KaryawanController extends Controller
                 'jabatan' => $jabatan,
                 'no_telp' => $no_telp,
                 'kode_dept' => $kode_dept,
+                'kode_cabang' => $kode_cabang,
                 'foto' => $foto,
             ];
             $update = Karyawan::where('nik',$nik)->update($data);
