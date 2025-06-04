@@ -25,7 +25,8 @@ class DashboardController extends Controller
         $yearNow = date('Y');
 
         # Recap data absensi
-        $recapData = DB::table('presensis')->selectRaw('COUNT(nik) as sum_presence, SUM(IF(jam_in > "07:00",1,0)) as sum_late')
+        $recapData = DB::table('presensis')->selectRaw('COUNT(nik) as sum_presence, SUM(IF(jam_in > jam_masuk,1,0)) as sum_late')
+            ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
             ->where('nik',$nik)
             ->whereRaw('MONTH(tgl_presensi)="'.$thisMonth.'"')
             ->whereRaw('YEAR(tgl_presensi)="'.$thisYear.'"')

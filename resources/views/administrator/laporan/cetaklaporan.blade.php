@@ -128,9 +128,9 @@
                 <td>{{ $item->jam_in != null ? $item->jam_in : 'Belum absen' }}</td>
                 <td>{{ $item->jam_out != null ? $item->jam_out : 'Belum absen' }}</td>
                 <td>
-                    @if($item->jam_in > '07:00:00') 
+                    @if($item->jam_in > $item->jam_masuk) 
                     @php
-                        $jam_terlambat = selisih('07:00:00', $item->jam_in);
+                        $jam_terlambat = selisih($item->jam_masuk, $item->jam_in);
                     @endphp Terlambat {{$jam_terlambat}}
                     @else Tepat Waktu
                     @endif

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('foto_out',255)->nullable();
             $table->text('location_in')->nullable();
             $table->text('location_out')->nullable();
+            $table->string('kode_jam_kerja')->nullable();
             $table->timestamps();
         });
     }
