@@ -41,6 +41,8 @@ class KantorCabangController extends Controller
         } catch (\Exception $e) {
             if($e->getCode() == 23000) {
                 $message = "Kode cabang ".$kode_cabang." sudah ada";
+            } else {
+                $message = "Ada kesalahan inputan.";
             }
             return redirect()->back()->with(['warning' => 'Data gagal disimpan. '. $message]);
         }

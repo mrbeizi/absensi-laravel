@@ -78,6 +78,8 @@ class KaryawanController extends Controller
         } catch (\Exception $e) {
             if($e->getCode() == 23000) {
                 $message = "NIK ".$nik." sudah ada";
+            } else {
+                $message = "Ada kesalahan inputan.";
             }
             return redirect()->back()->with(['warning' => 'Data gagal disimpan. '. $message]);
         }

@@ -89,9 +89,6 @@
             <div class="dropdown-menu {{ Route::is(['lokasi-kantor','jam-kerja']) ? 'show' : '' }}">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <a href="{{route('lokasi-kantor')}}" class="dropdown-item {{ Route::is(['lokasi-kantor']) ? 'active' : '' }}">
-                    Lokasi Kantor
-                  </a>
                   <a href="{{route('jam-kerja')}}" class="dropdown-item {{ Route::is(['jam-kerja']) ? 'active' : '' }}">
                     Jam Kerja
                   </a>

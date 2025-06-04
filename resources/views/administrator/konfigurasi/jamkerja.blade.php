@@ -160,6 +160,10 @@
 @push('myscript')
 <script>
     $(function() {
+        $('#awal_jam_masuk').mask("00:00");
+        $('#jam_masuk').mask("00:00");
+        $('#akhir_jam_masuk').mask("00:00");
+        $('#jam_pulang').mask("00:00");
         $('.edit').click(function() {
             var kode_jam_kerja = $(this).attr('kodejamker');
             var nama_jam_kerja = $(this).attr('namajamker');

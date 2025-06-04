@@ -237,6 +237,7 @@
 @push('myscript')
 <script>
     $(function() {
+        $('#nik').mask("0000.0.000");
         $('#btnTambahKaryawan').click(function() {
             $('#modal-inputkaryawan').modal('show');
         });
