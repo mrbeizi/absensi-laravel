@@ -27,6 +27,11 @@
                     {{Session::get('error')}}
                 </div>                
             @endif
+            @error('foto')
+                <div class="alert alert-warning">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
     </div>
     <form action="/update/{{$staf->nik}}/profile" method="POST" enctype="multipart/form-data" class="ml-2 mr-2">

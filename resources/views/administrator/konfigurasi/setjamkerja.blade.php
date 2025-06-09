@@ -133,6 +133,18 @@
                                     </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>Minggu
+                                    <input type="hidden" name="hari[]" value="Minggu">
+                                </td>
+                                <td><select name="kode_jam_kerja[]" id="kode_jam_kerja" class="form-select">
+                                        <option value="">- Pilih- </option>
+                                        @foreach ($jamkerja as $item)
+                                            <option value="{{$item->kode_jam_kerja}}">{{$item->nama_jam_kerja}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <button class="btn btn-primary w-100" type="submit"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>simpan</button>

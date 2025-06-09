@@ -62,7 +62,12 @@ class PresensiController extends Controller
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $office_loc  = Cabang::where('kode_cabang',$kode_cabang)->first();
         $jamKerja    = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')->where('nik',$nik)->where('hari',$namaHari)->first();
-        return view('presensi.index', compact('check','office_loc','jamKerja'));
+
+        if($jamKerja == null){
+            return view('presensi.notif-jadwal');
+        } else {
+            return view('presensi.index', compact('check','office_loc','jamKerja'));
+        }
     }
 
     public function store(Request $request)
@@ -184,6 +189,10 @@ class PresensiController extends Controller
 
         # Get previous photo in database, if photo is not updated
         $getData = DB::table('karyawans')->where('nik',$nik)->first();
+
+        $request->validate([
+            'foto' => 'image|mimes:png,jpg'
+        ]);
 
         if($request->hasFile('foto')){
             $foto = $nik.".".$request->file('foto')->getClientOriginalExtension();
