@@ -349,7 +349,7 @@
             if(kode_cabang == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Anda belum input nama jam kerja!',
+                    text: 'Anda belum memilih kantor!',
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     timer: 1500
@@ -360,7 +360,7 @@
             } else if(kode_dept == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Anda belum input awal jam masuk!',
+                    text: 'Anda belum memilih departemen!',
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     timer: 1500
