@@ -91,6 +91,13 @@ Route::middleware(['auth:user'])->group(function(){
     Route::get('/karyawan/{nik}/setjamkerja',[KonfigurasiController::class,'setjamkerja']);
     Route::post('/konfigurasi/storesetjamkerja',[KonfigurasiController::class,'storesetjamkerja']);
     Route::post('/konfigurasi/updatesetjamkerja',[KonfigurasiController::class,'updatesetjamkerja']);
+
+    // Jam Kerja Departemen
+    Route::get('/konfigurasi/jamkerjadept',[KonfigurasiController::class,'jamkerjadept'])->name('jam-kerja-department');
+    Route::post('/jamkerjadepartment/store',[KonfigurasiController::class,'simpanjamkerjadepartment']);
+    Route::post('/jamkerjadepartment/edit',[KonfigurasiController::class,'editjamkerjadepartment']);
+    Route::post('/jamkerjadepartment/{kode_jamker_dept}/destroy',[KonfigurasiController::class,'destroyjamkerdepartment']);
+    Route::post('/showjadwaljamkerjadept',[KonfigurasiController::class,'showjadwaljamkerdepartment'])->name('show-jadwal-jamker-dept');
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){
