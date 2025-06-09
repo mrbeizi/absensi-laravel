@@ -9,6 +9,7 @@ use App\Models\Karyawan;
 use App\Models\Cabang;
 use App\Models\PengajuanIzin;
 use App\Models\KonfigurasiJamKerja;
+use App\Models\KonfigurasiJamKerjaDepartmentDetail;
 use Auth;
 use DB;
 
@@ -58,10 +59,21 @@ class PresensiController extends Controller
         $today       = date('Y-m-d');
         $namaHari    = $this->getHari();
         $nik         = Auth::guard('karyawan')->user()->nik;
+        $kode_dept   = Auth::guard('karyawan')->user()->kode_dept;
         $check       = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $office_loc  = Cabang::where('kode_cabang',$kode_cabang)->first();
         $jamKerja    = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')->where('nik',$nik)->where('hari',$namaHari)->first();
+
+        # pengecekan jadwal kerja tiap departemen
+        if($jamKerja == null) {
+            $jamKerja = KonfigurasiJamKerjaDepartmentDetail::join('konfigurasi_jam_kerja_departments','konfigurasi_jam_kerja_departments.kode_jam_kerja_dept','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja_dept')
+                ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja')
+                ->where('kode_dept',$kode_dept)
+                ->where('kode_cabang',$kode_cabang)
+                ->where('hari',$namaHari)
+                ->first();
+        }
 
         if($jamKerja == null){
             return view('presensi.notif-jadwal');
@@ -73,6 +85,7 @@ class PresensiController extends Controller
     public function store(Request $request)
     {
         $nik          = Auth::guard('karyawan')->user()->nik;
+        $kode_dept    = Auth::guard('karyawan')->user()->kode_dept;
         $kode_cabang  = Auth::guard('karyawan')->user()->kode_cabang;
         $tgl_presensi = date('Y-m-d');
         $jam          = date('H:i:s');
@@ -111,6 +124,16 @@ class PresensiController extends Controller
         # Cek Jam Kerja
         $namaHari = $this->getHari();
         $jamKerja = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')->where('nik',$nik)->where('hari',$namaHari)->first();
+
+        # pengecekan jadwal kerja tiap departemen
+        if($jamKerja == null) {
+            $jamKerja = KonfigurasiJamKerjaDepartmentDetail::join('konfigurasi_jam_kerja_departments','konfigurasi_jam_kerja_departments.kode_jam_kerja_dept','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja_dept')
+                ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja')
+                ->where('kode_dept',$kode_dept)
+                ->where('kode_cabang',$kode_cabang)
+                ->where('hari',$namaHari)
+                ->first();
+        }
 
         # Check radius
         if($radius > $office_loc->radius){
