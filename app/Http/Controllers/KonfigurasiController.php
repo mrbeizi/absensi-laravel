@@ -232,7 +232,6 @@ class KonfigurasiController extends Controller
             }
             return redirect()->back()->with(['success' => 'Data berhasil disimpan!']);       
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             return redirect()->back()->with(['warning' => 'Data gagal disimpan!']);
         }        
