@@ -21,7 +21,7 @@
             </a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{ Route::is(['index-karyawan','index-department','index-kantorcabang']) ? 'show' : '' }}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{ Route::is(['index-karyawan','index-department']) ? 'true' : '' }}" >
+            <a class="nav-link dropdown-toggle {{ Route::is(['index-karyawan','index-department','index-kantorcabang','index-mastercuti']) ? 'show' : '' }}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{ Route::is(['index-karyawan','index-department','index-mastercuti']) ? 'true' : '' }}" >
               <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-database"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" /><path d="M4 6v6a8 3 0 0 0 16 0v-6" /><path d="M4 12v6a8 3 0 0 0 16 0v-6" /></svg>
               </span>
@@ -29,7 +29,7 @@
                 Data Master
               </span>
             </a>
-            <div class="dropdown-menu {{ Route::is(['index-karyawan','index-department','index-kantorcabang']) ? 'show' : '' }}">
+            <div class="dropdown-menu {{ Route::is(['index-karyawan','index-department','index-kantorcabang','index-mastercuti']) ? 'show' : '' }}">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
                   <a href="{{route('index-karyawan')}}" class="dropdown-item {{ Route::is(['index-karyawan']) ? 'active' : '' }}">
@@ -40,6 +40,9 @@
                   </a>
                   <a href="{{route('index-kantorcabang')}}" class="dropdown-item {{ Route::is(['index-kantorcabang']) ? 'active' : '' }}">
                     Kantor Cabang
+                  </a>
+                  <a href="{{route('index-mastercuti')}}" class="dropdown-item {{ Route::is(['index-mastercuti']) ? 'active' : '' }}">
+                    Cuti
                   </a>
                 </div>
               </div>

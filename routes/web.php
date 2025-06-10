@@ -10,6 +10,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\KantorCabangController;
 use App\Http\Controllers\PerizinanController;
+use App\Http\Controllers\MasterCutiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +100,12 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/jamkerjadepartment/edit',[KonfigurasiController::class,'editjamkerjadepartment']);
     Route::post('/jamkerjadepartment/{kode_jamker_dept}/destroy',[KonfigurasiController::class,'destroyjamkerdepartment']);
     Route::post('/showjadwaljamkerjadept',[KonfigurasiController::class,'showjadwaljamkerdepartment'])->name('show-jadwal-jamker-dept');
+
+    // Master Cuti
+    Route::get('master-cuti',[MasterCutiController::class, 'index'])->name('index-mastercuti');
+    Route::post('/master-cuti/store',[MasterCutiController::class,'simpanmastercuti']);
+    Route::post('/master-cuti/edit',[MasterCutiController::class,'editmastercuti']);
+    Route::post('/master-cuti/{kode_cuti}/destroy',[MasterCutiController::class,'destroymastercuti']);
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){

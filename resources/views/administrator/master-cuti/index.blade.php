@@ -1,5 +1,5 @@
 @extends('layouts.admin.tabler')
-@section('title','Konfigurasi')
+@section('title','Master Cuti')
 
 @section('content')
 <div class="page-header d-print-none">
@@ -11,7 +11,7 @@
             Overview
         </div>
         <h2 class="page-title">
-            Konfigurasi Jam Kerja
+            Master Cuti
         </h2>
         </div>        
     </div>
@@ -37,63 +37,33 @@
             <div class="col-4">
                 <div class="card">
                     <div class="card-body">                        
-                        <form action="/jamkerja/store" method="POST" id="formJamKerja">
+                        <form action="/master-cuti/store" method="POST" id="formJamKerja">
                             @csrf
                             <div class="row mt-2">                                
                                 <div class="col-12">
                                     <div class="input-icon mb-3">
-                                        <input type="hidden" value="" name="hidkodejamker" id="hidkodejamker" class="form-control">
+                                        <input type="hidden" value="" name="hidkodecuti" id="hidkodecuti" class="form-control">
                                         <span class="input-icon-addon">
                                             <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-grid-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 8v8" /><path d="M14 8v8" /><path d="M8 10h8" /><path d="M8 14h8" /><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /></svg>
                                         </span>
-                                        <input type="text" value="" name="kode_jam_kerja" id="kode_jam_kerja" class="form-control" placeholder="Kode jam kerja">
+                                        <input type="text" value="" name="kode_cuti" id="kode_cuti" class="form-control" placeholder="Kode cuti">
                                     </div>
                                     <div class="input-icon mb-3">
                                         <span class="input-icon-addon">
                                             <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-letter-case"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17.5 15.5m-3.5 0a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0" /><path d="M3 19v-10.5a3.5 3.5 0 0 1 7 0v10.5" /><path d="M3 13h7" /><path d="M21 12v7" /></svg>
                                         </span>
-                                        <input type="text" value="" name="nama_jam_kerja" id="nama_jam_kerja" class="form-control" placeholder="Nama jam kerja">
+                                        <input type="text" value="" name="nama_cuti" id="nama_cuti" class="form-control" placeholder="Nama cuti">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="input-icon mb-3">
-                                                <span class="input-icon-addon">
-                                                    <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
-                                                </span>
-                                                <input type="text" value="" name="awal_jam_masuk" id="awal_jam_masuk" class="form-control" placeholder="Awal jam masuk">
-                                            </div>                                            
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="input-icon mb-3">
-                                                <span class="input-icon-addon">
-                                                    <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
-                                                </span>
-                                                <input type="text" value="" name="jam_masuk" id="jam_masuk" class="form-control" placeholder="Jam masuk">
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="input-icon mb-3">
-                                                <span class="input-icon-addon">
-                                                    <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
-                                                </span>
-                                                <input type="text" value="" name="akhir_jam_masuk" id="akhir_jam_masuk" class="form-control" placeholder="Akhir jam masuk">
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="input-icon mb-3">
-                                                <span class="input-icon-addon">
-                                                    <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
-                                                </span>
-                                                <input type="text" value="" name="jam_pulang" id="jam_pulang" class="form-control" placeholder="Jam pulang">
-                                            </div>
-                                        </div>
+                                    <div class="input-icon mb-3">
+                                        <span class="input-icon-addon">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-forms"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3" /><path d="M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3" /><path d="M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7" /><path d="M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1" /><path d="M17 12h.01" /><path d="M13 12h.01" /></svg>
+                                        </span>
+                                        <input type="text" value="" name="jumlah_hari" id="jumlah_hari" class="form-control" placeholder="Jumlah hari">
                                     </div>
+                                    
                                     <div class="form-group tombol-simpan">
                                         <button class="btn btn-primary float-end"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M9 12h6" /><path d="M12 9v6" /></svg>Tambah</button>
                                     </div>
@@ -112,31 +82,25 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Kode Jam Kerja</th>
-                                            <th>Nama Jam Kerja</th>
-                                            <th>Awal Jam Kerja</th>
-                                            <th>Jam Masuk</th>
-                                            <th>Akhir Jam Kerja</th>
-                                            <th>Jam Pulang</th>
+                                            <th>Kode Cuti</th>
+                                            <th>Nama Cuti</th>
+                                            <th>Jumlah Hari</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($jamkerja as $data)
+                                        @foreach($cuti as $data)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $data->kode_jam_kerja }}</td>
-                                            <td>{{ $data->nama_jam_kerja }}</td>
-                                            <td>{{ $data->awal_jam_masuk }}</td>
-                                            <td>{{ $data->jam_masuk }}</td>
-                                            <td>{{ $data->akhir_jam_masuk }}</td>
-                                            <td>{{ $data->jam_pulang }}</td>
+                                            <td>{{ $data->kode_cuti }}</td>
+                                            <td>{{ $data->nama_cuti }}</td>
+                                            <td>{{ $data->jumlah_hari }}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="#" class="edit text-success" kodejamker="{{$data->kode_jam_kerja}}" namajamker="{{$data->nama_jam_kerja}}" awaljam={{$data->awal_jam_masuk}} jammasuk="{{$data->jam_masuk}}" akhirjam="{{$data->akhir_jam_masuk}}" jampulang="{{$data->jam_pulang}}">
+                                                    <a href="#" class="edit text-success" kodecuti="{{$data->kode_cuti}}" namacuti="{{$data->nama_cuti}}" jumlahhari="{{$data->jumlah_hari}}">
                                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                                     </a>&nbsp;&nbsp;
-                                                    <form action="/jamkerja/{{ $data->kode_jam_kerja }}/destroy" method="POST">
+                                                    <form action="/master-cuti/{{ $data->kode_cuti }}/destroy" method="POST">
                                                         @csrf
                                                         <a href="http://" class="confirm-delete text-danger">
                                                             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
@@ -160,37 +124,28 @@
 @push('myscript')
 <script>
     $(function() {
-        $('#awal_jam_masuk').mask("00:00");
-        $('#jam_masuk').mask("00:00");
-        $('#akhir_jam_masuk').mask("00:00");
-        $('#jam_pulang').mask("00:00");
+        $('#jumlah_hari').mask("00");
         $('.edit').click(function() {
-            var kode_jam_kerja = $(this).attr('kodejamker');
-            var nama_jam_kerja = $(this).attr('namajamker');
-            var awal_jam_masuk = $(this).attr('awaljam');
-            var jam_masuk = $(this).attr('jammasuk');
-            var akhir_jam_masuk = $(this).attr('akhirjam');
-            var jam_pulang = $(this).attr('jampulang');
+            var kode_cuti = $(this).attr('kodecuti');
+            var nama_cuti = $(this).attr('namacuti');
+            var jumlah_hari = $(this).attr('jumlahhari');
             $.ajax({
                 type: 'POST',
-                url: "/jamkerja/edit",
+                url: "/master-cuti/edit",
                 cache: false,
                 data:{
                     _token: "{{ csrf_token(); }}",
-                    kode_jam_kerja:kode_jam_kerja
+                    kode_cuti:kode_cuti
                 },
                 success: function(respond){
-                    $('#hidkodejamker').val(kode_jam_kerja);
-                    $('#kode_jam_kerja').val(kode_jam_kerja);
-                    $('#kode_jam_kerja').prop('disabled', true);
-                    $('#nama_jam_kerja').val(nama_jam_kerja);
-                    $('#awal_jam_masuk').val(awal_jam_masuk);
-                    $('#jam_masuk').val(jam_masuk);
-                    $('#akhir_jam_masuk').val(akhir_jam_masuk);
-                    $('#jam_pulang').val(jam_pulang);
+                    $('#hidkodecuti').val(kode_cuti);
+                    $('#kode_cuti').val(kode_cuti);
+                    $('#kode_cuti').prop('disabled', true);
+                    $('#nama_cuti').val(nama_cuti);
+                    $('#jumlah_hari').val(jumlah_hari);
                     $('.tombol-simpan').html(`
                     <div class="btn-group float-end">
-                        <a href="{{route('jam-kerja')}}" class="btn btn-secondary">
+                        <a href="{{route('index-mastercuti')}}" class="btn btn-secondary">
                             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>Cancel                            
                         </a>&nbsp;&nbsp;
                         <button class="btn btn-primary">
@@ -223,80 +178,44 @@
         });
 
         $('#formJamKerja').submit(function(){
-            var kode_jam_kerja = $('#kode_jam_kerja').val();
-            var nama_jam_kerja = $('#nama_jam_kerja').val();
-            var awal_jam_masuk = $('#awal_jam_masuk').val();
-            var jam_masuk = $('#jam_masuk').val();
-            var akhir_jam_masuk = $('#akhir_jam_masuk').val();
-            var jam_pulang = $('#jam_pulang').val();
+            var kode_cuti = $('#kode_cuti').val();
+            var nama_cuti = $('#nama_cuti').val();
+            var jumlah_hari = $('#jumlah_hari').val();
 
-            if(kode_jam_kerja == "") {
+            if(kode_cuti == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Anda belum kode jam kerja!',
+                    text: 'Anda belum input kode cuti!',
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then((result) => {
-                    $('#kode_jam_kerja').focus();
+                    $('#kode_cuti').focus();
                 });
                 return false;
-            } else if(nama_jam_kerja == "") {
+            } else if(nama_cuti == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Anda belum input nama jam kerja!',
+                    text: 'Anda belum input nama cuti!',
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then((result) => {
-                    $('#nama_jam_kerja').focus();
+                    $('#nama_cuti').focus();
                 });
                 return false;
-            } else if(awal_jam_masuk == "") {
+            } else if(jumlah_hari == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Anda belum input awal jam masuk!',
+                    text: 'Anda belum input jumlah hari!',
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then((result) => {
-                    $('#awal_jam_masuk').focus();
+                    $('#jumlah_hari').focus();
                 });
                 return false;
-            } else if(jam_masuk == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Anda belum input jam masuk!',
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    timer: 1500
-                }).then((result) => {
-                    $('#jam_masuk').focus();
-                });
-                return false;
-            } else if(akhir_jam_masuk == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Anda belum input akhir jam masuk!',
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    timer: 1500
-                }).then((result) => {
-                    $('#akhir_jam_masuk').focus();
-                });
-                return false;
-            } else if(jam_pulang == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Anda belum input jam pulang!',
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    timer: 1500
-                }).then((result) => {
-                    $('#jam_pulang').focus();
-                });
-                return false;
-            }
+            } 
         });
     });
 </script>
