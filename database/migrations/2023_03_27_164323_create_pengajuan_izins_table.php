@@ -14,11 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pengajuan_izins', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('kode_izin',10);
             $table->string('nik',6);
-            $table->date('tgl_izin');
+            $table->date('tgl_izin_dari');
+            $table->date('tgl_izin_sampai');
             $table->string('status',1);
             $table->string('keterangan',100);
+            $table->string('docs_sid',15)->nullable();
             $table->string('status_approved',1);
             $table->timestamps();
         });

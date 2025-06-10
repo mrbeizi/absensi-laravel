@@ -9,6 +9,7 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\KantorCabangController;
+use App\Http\Controllers\PerizinanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,4 +121,11 @@ Route::middleware(['auth:karyawan'])->group(function(){
     Route::post('/presensi-izin/store',[PresensiController::class,'storeizin'])->name('store-izin');
 
     Route::post('cekdata-pengajuan-izin',[PresensiController::class, 'cekdatapengajuanizin'])->name('cekdata-pengajuan-izin');
+
+    # Perizinan
+    Route::get('/izinabsen',[PerizinanController::class, 'indexizinabsen'])->name('index-izinabsen');
+    Route::post('/izinabsen/store',[PerizinanController::class,'storeizinabsen'])->name('store-izinabsen');
+    
+    Route::get('/izinsakit',[PerizinanController::class, 'indexizinsakit'])->name('index-izinsakit');
+    Route::post('/izinsakit/store',[PerizinanController::class,'storeizinsakit'])->name('store-izinsakit');
 });

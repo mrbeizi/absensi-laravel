@@ -40,8 +40,8 @@ class DashboardController extends Controller
         $recapIzin = DB::table('pengajuan_izins')
             ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
             ->where('nik',$nik)
-            ->whereRaw('MONTH(tgl_izin)="'.$thisMonth.'"')
-            ->whereRaw('YEAR(tgl_izin)="'.$thisYear.'"')
+            ->whereRaw('MONTH(tgl_izin_dari)="'.$thisMonth.'"')
+            ->whereRaw('YEAR(tgl_izin_dari)="'.$thisYear.'"')
             ->where('status_approved',1)
             ->first();
 
@@ -57,7 +57,7 @@ class DashboardController extends Controller
         
         $recapIzin = DB::table('pengajuan_izins')
             ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
-            ->where('tgl_izin',$today)
+            ->where('tgl_izin_dari',$today)
             ->where('status_approved',1)
             ->first();
         return view('dashboard.dashboardadmin', compact('recapData','recapIzin'));
