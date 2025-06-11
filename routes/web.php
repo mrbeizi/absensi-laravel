@@ -132,7 +132,18 @@ Route::middleware(['auth:karyawan'])->group(function(){
     # Perizinan
     Route::get('/izinabsen',[PerizinanController::class, 'indexizinabsen'])->name('index-izinabsen');
     Route::post('/izinabsen/store',[PerizinanController::class,'storeizinabsen'])->name('store-izinabsen');
+    Route::get('/izinabsen/{kode_izin}/edit',[PerizinanController::class, 'editizinabsen'])->name('edit-izinabsen');
+    Route::post('/izinabsen/{kode_izin}/update',[PerizinanController::class, 'updateizinabsen'])->name('update-izinabsen');
     
     Route::get('/izinsakit',[PerizinanController::class, 'indexizinsakit'])->name('index-izinsakit');
     Route::post('/izinsakit/store',[PerizinanController::class,'storeizinsakit'])->name('store-izinsakit');
+    Route::get('/izinsakit/{kode_izin}/edit',[PerizinanController::class, 'editizinsakit'])->name('edit-izinsakit');
+    Route::post('/izinsakit/{kode_izin}/update',[PerizinanController::class, 'updateizinsakit'])->name('update-izinsakit');
+
+    Route::get('/izincuti',[PerizinanController::class, 'indexizincuti'])->name('index-izincuti');
+    Route::post('/izincuti/store',[PerizinanController::class,'storeizincuti'])->name('store-izincuti');
+    Route::get('/izincuti/{kode_izin}/edit',[PerizinanController::class, 'editizincuti'])->name('edit-izincuti');
+    Route::post('/izincuti/{kode_izin}/update',[PerizinanController::class, 'updateizincuti'])->name('update-izincuti');
+
+    Route::get('/izin/{kode_izin}/showact',[PresensiController::class, 'showact']);
 });

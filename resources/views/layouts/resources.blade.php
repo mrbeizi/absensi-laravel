@@ -19,6 +19,17 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
     <link rel="manifest" href="__manifest.json">
+    <style>
+        .custom-select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
 </head>
 
 <body style="background-color:#e9ecef;">

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('tgl_izin_sampai');
             $table->string('status',1);
             $table->string('keterangan',100);
+            $table->string('kode_cuti',10)->nullable();
             $table->string('docs_sid',15)->nullable();
             $table->string('status_approved',1);
             $table->timestamps();

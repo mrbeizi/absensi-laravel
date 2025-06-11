@@ -277,7 +277,11 @@ class PresensiController extends Controller
     public function izin()
     {
         $nik = Auth::guard('karyawan')->user()->nik;
-        $datas = DB::table('pengajuan_izins')->where('nik',$nik)->get();
+        $datas = DB::table('pengajuan_izins')
+            ->leftJoin('master_cutis','master_cutis.kode_cuti','=','pengajuan_izins.kode_cuti')
+            ->select('pengajuan_izins.*','master_cutis.nama_cuti')
+            ->where('nik',$nik)
+            ->get();
         return view('presensi.izin', compact('datas'));
     }
 
@@ -483,5 +487,11 @@ class PresensiController extends Controller
         $nik = Auth::guard('karyawan')->user()->nik;
         $cek = PengajuanIzin::where('nik',$nik)->where('tgl_izin',$tgl)->count();
         return $cek;
+    }
+
+    public function showact($kode_izin)
+    {
+        $dataizin = DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->first();
+        return view('presensi.showact', compact('dataizin'));
     }
 }

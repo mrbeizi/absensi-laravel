@@ -8,7 +8,7 @@
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">Data Izin / Sakit</div>
+        <div class="pageTitle">Data Izin</div>
         <div class="right"></div>
     </div>
     <!-- * App Header -->
@@ -47,7 +47,7 @@
     <div class="row">
         <div class="col ml-2 mr-2">
             @foreach($datas as $data)
-            <div class="card mb-1">
+            <div class="card mb-1 card_izin" kodeizin="{{$data->kode_izin}}" data-toggle="modal" data-target="#actionSheetIconed">
                 <div class="card-body">
                     <div class="historicontent">
                         <div class="iconpresensi">
@@ -56,13 +56,16 @@
                             @elseif($data->status == "s")
                             <ion-icon name="medkit-outline" role="img" class="md hydrated text-danger" aria-label="finger print" style="font-size: 38px;"></ion-icon>
                             @else
-                            <ion-icon name="hourglass-outline" role="img" class="md hydrated text-primary" aria-label="finger print" style="font-size: 38px;"></ion-icon>
+                            <ion-icon name="calendar-outline" role="img" class="md hydrated text-info" aria-label="finger print" style="font-size: 38px;"></ion-icon>
                             @endif
                         </div>
                         <div class="dataizin">
                             <h3>{{date("d-m-Y", strtotime($data->tgl_izin_dari))}} ({{ ($data->status == "i") ? "Izin" : (($data->status == "s") ? "Sakit" : (($data->status == "c") ? "Cuti" : "Data not found")) }})</h3>
                             <small>{{date("d-m-Y", strtotime($data->tgl_izin_dari))}} s.d {{date("d-m-Y", strtotime($data->tgl_izin_sampai))}}</small>
                             <p>{{$data->keterangan}}<br>
+                                @if($data->status == "c")
+                                <span class="badge bg-info">{{$data->nama_cuti}}</span>
+                                @endif
                                 @if(!empty($data->docs_sid))
                                 <small class="text-primary"><ion-icon name="document-attach-outline"></ion-icon> Lihat SID</small>
                                 @endif</p>
@@ -83,11 +86,6 @@
             @endforeach
         </div>
     </div>
-    {{-- <div class="fab-button bottom-right" style="margin-bottom:70px">
-        <a href="{{route('create-izin')}}" class="fab">
-            <ion-icon name="add-outline"></ion-icon>
-        </a>
-    </div> --}}
     <div class="fab-button animate bottom-right dropdown" style="margin-bottom: 70px;">
         <a href="#" class="fab bg-primary" data-toggle="dropdown">
             <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
@@ -101,11 +99,34 @@
                 <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                 <p>Sakit</p>
             </a>
-            <a href="" class="dropdown-item bg-primary">
+            <a href="{{route('index-izincuti')}}" class="dropdown-item bg-primary">
                 <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                 <p>Cuti</p>
             </a>
         </div>
     </div>
+
+    <div class="modal fade action-sheet" id="actionSheetIconed" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">AKSI</h5>
+                </div>
+                <div class="modal-body" id="showact">
+    
+                </div>
+            </div>
+        </div>
+    </div>
     
 @endsection
+@push('myscript')
+    <script>
+        $(function(){
+          $('.card_izin').click(function(e){
+            var kode_izin = $(this).attr("kodeizin");
+            $('#showact').load('/izin/'+kode_izin+'/showact');
+          });
+        });
+    </script>
+@endpush
