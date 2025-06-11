@@ -44,6 +44,41 @@
             @endif
         </div>        
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form action="{{route('presensi-izin')}}" method="GET">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-group">
+                                <select name="bulan" id="bulan" class="form-select custom-select">
+                                    <option value="">Bulan</option>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option {{Request('bulan') == $i ? 'selected' : ''}} value="{{$i}}">{{$monthName[$i]}}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <select name="tahun" id="tahun" class="form-select custom-select">
+                                    <option value="">Tahun</option>
+                                    @for ($year = 2022; $year <= date('Y'); $year++)
+                                        <option {{Request('tahun') == $year ? 'selected' : ''}} value={{$year}}>{{$year}}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-sm w-100"><ion-icon name="search-outline"></ion-icon> Cari</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col ml-2 mr-2">
             @foreach($datas as $data)
@@ -114,6 +149,25 @@
                 </div>
                 <div class="modal-body" id="showact">
     
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade dialogbox" id="deleteConfirm" data-backdrop="static" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yakin Dihapus ?</h5>
+                </div>
+                <div class="modal-body">
+                    Data Pengajuan Izin Akan dihapus
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-inline">
+                        <a href="#" class="btn btn-text-secondary" data-dismiss="modal">Batalkan</a>
+                        <a href="" class="btn btn-text-primary" id="hapuspengajuan">Hapus</a>
+                    </div>
                 </div>
             </div>
         </div>

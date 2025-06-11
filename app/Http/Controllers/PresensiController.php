@@ -274,15 +274,31 @@ class PresensiController extends Controller
         return view('presensi.get-history', compact('history'));
     }
 
-    public function izin()
+    public function izin(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
-        $datas = DB::table('pengajuan_izins')
-            ->leftJoin('master_cutis','master_cutis.kode_cuti','=','pengajuan_izins.kode_cuti')
-            ->select('pengajuan_izins.*','master_cutis.nama_cuti')
-            ->where('nik',$nik)
-            ->get();
-        return view('presensi.izin', compact('datas'));
+
+        if(!empty($request->bulan) && !empty($request->tahun)){
+            $datas = DB::table('pengajuan_izins')
+                ->leftJoin('master_cutis','master_cutis.kode_cuti','=','pengajuan_izins.kode_cuti')
+                ->select('pengajuan_izins.*','master_cutis.nama_cuti')
+                ->where('nik',$nik)
+                ->whereRaw('MONTH(tgl_izin_dari)="'.$request->bulan.'"')
+                ->whereRaw('YEAR(tgl_izin_dari)="'.$request->tahun.'"')
+                ->orderBy('tgl_izin_dari','desc')
+                ->get();
+        } else {
+            $datas = DB::table('pengajuan_izins')
+                ->leftJoin('master_cutis','master_cutis.kode_cuti','=','pengajuan_izins.kode_cuti')
+                ->select('pengajuan_izins.*','master_cutis.nama_cuti')
+                ->where('nik',$nik)
+                ->orderBy('tgl_izin_dari','desc')
+                ->limit(5)->latest()->get();
+        }
+
+        
+        $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        return view('presensi.izin', compact('datas','monthName'));
     }
 
     public function createizin()
@@ -304,6 +320,22 @@ class PresensiController extends Controller
             return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
         } else {
             return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+        }
+    }
+
+    public function deletedataizin($kode_izin)
+    {
+        $check = DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->first();
+        $docs_sid = $check->docs_sid;
+
+        try {
+            DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->delete();
+            if($docs_sid != null){
+                Storage::delete('/public/uploads/sid/'.$docs_sid);
+            }
+            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil dihapus!']);
+        } catch (\Exception $e) {
+            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal dihapus!']);
         }
     }
 
