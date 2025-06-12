@@ -41,7 +41,7 @@ class DashboardController extends Controller
 
         # rekapIzin\
         $recapIzin = DB::table('pengajuan_izins')
-            ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit, , SUM(IF(status="c",1,0)) as jmlcuti')
+            ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit, SUM(IF(status="c",1,0)) as jmlcuti')
             ->where('nik',$nik)
             ->whereRaw('MONTH(tgl_izin_dari)="'.$thisMonth.'"')
             ->whereRaw('YEAR(tgl_izin_dari)="'.$thisYear.'"')

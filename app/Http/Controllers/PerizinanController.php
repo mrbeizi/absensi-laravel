@@ -30,23 +30,34 @@ class PerizinanController extends Controller
         $format = "IZ".$m.$digitY;
         $izinCode = izinCodeGen($latestIzinCode,$format,4);
 
-        $post = DB::table('pengajuan_izins')->insert([
-            'kode_izin' => $izinCode,
-            'nik' => Auth::guard('karyawan')->user()->nik,
-            'tgl_izin_dari' => $request->tgl_izin_dari,
-            'tgl_izin_sampai' => $request->tgl_izin_sampai,
-            'status' => 'i',
-            'keterangan' => $request->keterangan,
-            'status_approved' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        # melakukan pengecekan data tanggal pengajuan absen dengan presensi
+        $check = DB::table('presensis')
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            $datapresensi = $check->get();
+            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
 
-        if($post){
-            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+        if($check->count() > 0 || $checkpengajuan->count() > 0){
+            return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
         } else {
-            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+            $post = DB::table('pengajuan_izins')->insert([
+                'kode_izin' => $izinCode,
+                'nik' => Auth::guard('karyawan')->user()->nik,
+                'tgl_izin_dari' => $request->tgl_izin_dari,
+                'tgl_izin_sampai' => $request->tgl_izin_sampai,
+                'status' => 'i',
+                'keterangan' => $request->keterangan,
+                'status_approved' => 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+    
+            if($post){
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+            } else {
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+            }
         }
+
     }
 
     public function editizinabsen($kode_izin)
@@ -57,17 +68,27 @@ class PerizinanController extends Controller
 
     public function updateizinabsen($kode_izin, Request $request)
     {
-        $update = DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->update([
-            'tgl_izin_dari' => $request->tgl_izin_dari,
-            'tgl_izin_sampai' => $request->tgl_izin_sampai,
-            'keterangan' => $request->keterangan,
-            'updated_at' => now()
-        ]);
+        # melakukan pengecekan data tanggal pengajuan absen dengan presensi
+        $check = DB::table('presensis')
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            $datapresensi = $check->get();
+            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
 
-        if($update){
-            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diupdate!']);
+        if($check->count() > 0 || $checkpengajuan->count() > 0){
+            return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
         } else {
-            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diupdate!']);
+            $update = DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->update([
+                'tgl_izin_dari' => $request->tgl_izin_dari,
+                'tgl_izin_sampai' => $request->tgl_izin_sampai,
+                'keterangan' => $request->keterangan,
+                'updated_at' => now()
+            ]);
+    
+            if($update){
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diupdate!']);
+            } else {
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diupdate!']);
+            }
         }
     }
 
@@ -97,30 +118,41 @@ class PerizinanController extends Controller
         } else {
             $sid = null;
         }
-        
-        $post = DB::table('pengajuan_izins')->insert([
-            'kode_izin' => $izinCode,
-            'nik' => Auth::guard('karyawan')->user()->nik,
-            'tgl_izin_dari' => $request->tgl_izin_dari,
-            'tgl_izin_sampai' => $request->tgl_izin_sampai,
-            'status' => 's',
-            'keterangan' => $request->keterangan,
-            'docs_sid' => $sid,
-            'status_approved' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
 
-        if($post){
-            if ($request->hasFile('sid')) {
-                $sid = $izinCode . "." . $request->file('sid')->getClientOriginalExtension();
-                $folderPath = "public/uploads/sid";
-                $request->file('sid')->storeAs($folderPath, $sid);
-            }
-            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+        # melakukan pengecekan data tanggal pengajuan absen dengan presensi
+        $check = DB::table('presensis')
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            $datapresensi = $check->get();
+            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+
+        if($check->count() > 0 || $checkpengajuan->count() > 0){
+            return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
         } else {
-            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+            $post = DB::table('pengajuan_izins')->insert([
+                'kode_izin' => $izinCode,
+                'nik' => Auth::guard('karyawan')->user()->nik,
+                'tgl_izin_dari' => $request->tgl_izin_dari,
+                'tgl_izin_sampai' => $request->tgl_izin_sampai,
+                'status' => 's',
+                'keterangan' => $request->keterangan,
+                'docs_sid' => $sid,
+                'status_approved' => 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+    
+            if($post){
+                if ($request->hasFile('sid')) {
+                    $sid = $izinCode . "." . $request->file('sid')->getClientOriginalExtension();
+                    $folderPath = "public/uploads/sid";
+                    $request->file('sid')->storeAs($folderPath, $sid);
+                }
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+            } else {
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+            }
         }
+        
     }
 
     public function editizinsakit($kode_izin)
@@ -137,25 +169,36 @@ class PerizinanController extends Controller
             $sid = null;
         }
 
-        $data = [
-            'tgl_izin_dari' => $request->tgl_izin_dari,
-            'tgl_izin_sampai' => $request->tgl_izin_sampai,
-            'keterangan' => $request->keterangan,
-            'docs_sid' => $sid,
-            'updated_at' => now()
-        ];
+        # melakukan pengecekan data tanggal pengajuan absen dengan presensi
+        $check = DB::table('presensis')
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            $datapresensi = $check->get();
+            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
 
-        try {
-            DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->update($data);
-            if($request->hasFile('sid')) {
-                $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
-                $folderPath = "public/uploads/sid/";
-                $request->file('sid')->storeAs($folderPath, $sid);
+        if($check->count() > 0 || $checkpengajuan->count() > 0){
+            return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
+        } else {
+            $data = [
+                'tgl_izin_dari' => $request->tgl_izin_dari,
+                'tgl_izin_sampai' => $request->tgl_izin_sampai,
+                'keterangan' => $request->keterangan,
+                'docs_sid' => $sid,
+                'updated_at' => now()
+            ];
+    
+            try {
+                DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->update($data);
+                if($request->hasFile('sid')) {
+                    $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
+                    $folderPath = "public/uploads/sid/";
+                    $request->file('sid')->storeAs($folderPath, $sid);
+                }
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diupdate!']);
+            } catch (\Exception $e) {
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diupdate!']);
             }
-            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diupdate!']);
-        } catch (\Exception $e) {
-            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diupdate!']);
         }
+
     }
 
     public function indexizincuti()
@@ -166,6 +209,7 @@ class PerizinanController extends Controller
 
     public function storeizincuti(Request $request)
     {
+        $nik = Auth::guard('karyawan')->user()->nik;
         $m = date("m", strtotime($request->tgl_izin_dari));
         $y = date("Y", strtotime($request->tgl_izin_dari));
         $digitY = substr($y, 2, 2);
@@ -180,24 +224,44 @@ class PerizinanController extends Controller
         $format = "IZ".$m.$digitY;
         $izinCode = izinCodeGen($latestIzinCode,$format,4);
 
-        $post = DB::table('pengajuan_izins')->insert([
-            'kode_izin' => $izinCode,
-            'nik' => Auth::guard('karyawan')->user()->nik,
-            'tgl_izin_dari' => $request->tgl_izin_dari,
-            'tgl_izin_sampai' => $request->tgl_izin_sampai,
-            'status' => 'c',
-            'keterangan' => $request->keterangan,
-            'kode_cuti' => $request->kode_cuti,
-            'status_approved' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        # melakukan pengecekan cuti dan jumlah yang sudah digunakan (disetujui) pada tahun sekarang (aktif)
+        $countday = countDay($request->tgl_izin_dari,$request->tgl_izin_sampai);
+        $datacuti = MasterCuti::where('kode_cuti', $request->kode_cuti)->first();
+        $maxcuti = $datacuti->jumlah_hari;
+        $usedcuti = DB::table('presensis')->whereRaw('YEAR(tgl_presensi)="'.$y.'"')->where('status','c')->where('nik',$nik)->count();
+        $sisacuti = $maxcuti - $usedcuti;
 
-        if($post){
-            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+        # melakukan pengecekan data tanggal pengajuan absen dengan presensi
+        $check = DB::table('presensis')
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            $datapresensi = $check->get();
+            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+
+        if($countday > $sisacuti) {
+            return redirect()->route('presensi-izin')->with(['error' => 'Sisa cuti anda tidak cukup. Sisa cuti '.$datacuti->nama_cuti.' anda adalah '.$sisacuti.' hari']);
+        } else if($check->count() > 0 || $checkpengajuan->count() > 0){
+            return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
         } else {
-            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+            $post = DB::table('pengajuan_izins')->insert([
+                'kode_izin' => $izinCode,
+                'nik' => $nik,
+                'tgl_izin_dari' => $request->tgl_izin_dari,
+                'tgl_izin_sampai' => $request->tgl_izin_sampai,
+                'status' => 'c',
+                'keterangan' => $request->keterangan,
+                'kode_cuti' => $request->kode_cuti,
+                'status_approved' => 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+    
+            if($post){
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+            } else {
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+            }
         }
+
     }
 
     public function editizincuti($kode_izin)
@@ -209,18 +273,37 @@ class PerizinanController extends Controller
 
     public function updateizincuti($kode_izin, Request $request)
     {
-        $update = DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->update([
-            'tgl_izin_dari' => $request->tgl_izin_dari,
-            'tgl_izin_sampai' => $request->tgl_izin_sampai,
-            'keterangan' => $request->keterangan,
-            'kode_cuti' => $request->kode_cuti,
-            'updated_at' => now()
-        ]);
+        # melakukan pengecekan cuti dan jumlah yang sudah digunakan (disetujui) pada tahun sekarang (aktif)
+        $countday = countDay($request->tgl_izin_dari,$request->tgl_izin_sampai);
+        $datacuti = MasterCuti::where('kode_cuti', $request->kode_cuti)->first();
+        $maxcuti = $datacuti->jumlah_hari;
+        $usedcuti = DB::table('presensis')->whereRaw('YEAR(tgl_presensi)="'.$y.'"')->where('status','c')->where('nik',$nik)->count();
+        $sisacuti = $maxcuti - $usedcuti;
 
-        if($update){
-            return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diupdate!']);
+        # melakukan pengecekan data tanggal pengajuan absen dengan presensi
+        $check = DB::table('presensis')
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            $datapresensi = $check->get();
+            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+
+        if($countday > $sisacuti) {
+            return redirect()->route('presensi-izin')->with(['error' => 'Sisa cuti anda tidak cukup. Sisa cuti '.$datacuti->nama_cuti.' anda adalah '.$sisacuti.' hari']);
+        } else if($check->count() > 0 || $checkpengajuan->count() > 0){
+            return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
         } else {
-            return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diupdate!']);
+            $update = DB::table('pengajuan_izins')->where('kode_izin',$kode_izin)->update([
+                'tgl_izin_dari' => $request->tgl_izin_dari,
+                'tgl_izin_sampai' => $request->tgl_izin_sampai,
+                'keterangan' => $request->keterangan,
+                'kode_cuti' => $request->kode_cuti,
+                'updated_at' => now()
+            ]);
+    
+            if($update){
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diupdate!']);
+            } else {
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diupdate!']);
+            }
         }
     }
 }

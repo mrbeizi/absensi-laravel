@@ -42,6 +42,11 @@
                     {{Session::get('error')}}
                 </div>                
             @endif
+            @if (Session::get('warning'))
+                <div class="alert alert-warning">
+                    {{Session::get('warning')}}
+                </div>                
+            @endif
         </div>        
     </div>
     <div class="container">
