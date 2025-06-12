@@ -50,21 +50,6 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 <body class="A4">
-    @php
-    function selisih($jam_in, $jam_out){
-        list($h, $m, $s) = explode(":", $jam_in);
-        $dtAwal = mktime($h, $m, $s, "1", "1", "1");
-        list($h, $m, $s) = explode(":", $jam_out);
-        $dtAkhir = mktime($h, $m, $s, "1", "1", "1");
-        $dtSelisih = $dtAkhir - $dtAwal;
-        $totalMenit = $dtSelisih / 60;
-        $jam = explode(".", $totalMenit / 60);
-        $sisaMenit = ($totalMenit / 60) - $jam[0];
-        $sisaMenit2 = $sisaMenit * 60;
-        $jml_jam = $jam[0];
-        return $jml_jam . ":" . round($sisaMenit2);
-    }
-    @endphp
 
   <!-- Each sheet element should have the class "sheet" -->
   <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->

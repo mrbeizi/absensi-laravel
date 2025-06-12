@@ -69,7 +69,7 @@ Route::middleware(['auth:user'])->group(function(){
     // Izin Sakit Cuti
     Route::get('data-pengajuan-izin',[PresensiController::class, 'dataizinsakit'])->name('data-izinsakit');
     Route::post('approve-izinsakit',[PresensiController::class, 'approveizinsakit'])->name('approve-izinsakit');
-    Route::get('presensi/{id}/batalkanizinsakit',[PresensiController::class,'batalkanizinsakit']);
+    Route::get('presensi/{kode_izin}/batalkanizinsakit',[PresensiController::class,'batalkanizinsakit']);
     
 
     // Konfigurasi

@@ -82,7 +82,7 @@
     <div class="row">
         <div class="col ml-2 mr-2">
             @foreach($datas as $data)
-            <div class="card mb-1 card_izin" kodeizin="{{$data->kode_izin}}" data-toggle="modal" data-target="#actionSheetIconed">
+            <div class="card mb-1 card_izin" kodeizin="{{$data->kode_izin}}" statusapproved="{{$data->status_approved}}" data-toggle="modal" data-target="#actionSheetIconed">
                 <div class="card-body">
                     <div class="historicontent">
                         <div class="iconpresensi">
@@ -179,7 +179,17 @@
         $(function(){
           $('.card_izin').click(function(e){
             var kode_izin = $(this).attr("kodeizin");
-            $('#showact').load('/izin/'+kode_izin+'/showact');
+            var status_approved = $(this).attr("statusapproved");
+            if(status_approved == 1){
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'Can not revert the state!',
+                    icon: 'warning',
+                    timer: 1500
+                })
+            } else {
+                $('#showact').load('/izin/'+kode_izin+'/showact');
+            }
           });
         });
     </script>

@@ -17,9 +17,12 @@ class DashboardController extends Controller
         $todayPresence = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->first();
         $historyPerMonth = DB::table('presensis')
             ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
+            ->leftJoin('pengajuan_izins','pengajuan_izins.kode_izin','=','presensis.kode_izin')
+            ->leftJoin('master_cutis','master_cutis.kode_cuti','=','pengajuan_izins.kode_cuti')
+            ->select('presensis.*','jam_kerjas.*','pengajuan_izins.keterangan','docs_sid','nama_cuti')
             ->whereRaw('MONTH(tgl_presensi)="'.$thisMonth.'"')
             ->whereRaw('YEAR(tgl_presensi)="'.$thisYear.'"')
-            ->where('nik',$nik)
+            ->where('presensis.nik',$nik)
             ->orderBy('tgl_presensi','DESC')
             ->get();
         $monthName = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];

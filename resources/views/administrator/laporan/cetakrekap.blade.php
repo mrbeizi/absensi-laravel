@@ -34,12 +34,12 @@
         border: 1px solid #ddd;
         padding: 8px;
         background-color: azure;
-        font-size: 10px;
+        font-size: 9px;
     }
     .tablepresensi tr td {
         border: 1px solid #ddd;
         padding: 8px;
-        font-size: 10px;
+        font-size: 9px;
         text-align: center;
     }
     </style>
@@ -48,21 +48,6 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 <body class="A4 landscape">
-    @php
-    function selisih($jam_in, $jam_out){
-        list($h, $m, $s) = explode(":", $jam_in);
-        $dtAwal = mktime($h, $m, $s, "1", "1", "1");
-        list($h, $m, $s) = explode(":", $jam_out);
-        $dtAkhir = mktime($h, $m, $s, "1", "1", "1");
-        $dtSelisih = $dtAkhir - $dtAwal;
-        $totalMenit = $dtSelisih / 60;
-        $jam = explode(".", $totalMenit / 60);
-        $sisaMenit = ($totalMenit / 60) - $jam[0];
-        $sisaMenit2 = $sisaMenit * 60;
-        $jml_jam = $jam[0];
-        return $jml_jam . ":" . round($sisaMenit2);
-    }
-    @endphp
 
   <!-- Each sheet element should have the class "sheet" -->
   <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
@@ -88,49 +73,74 @@
         <tr>
             <th rowspan="2">NIK</th>
             <th rowspan="2">Nama Karyawan</th>
-            <th colspan="31">Tanggal</th>
-            <th rowspan="2">TH</th>
-            <th rowspan="2">TT</th>
+            <th colspan="{{$jumlahHari}}">Bulan {{$monthName[$bulan]}} {{$tahun}}</th>
+            <th rowspan="2">H</th>
+            <th rowspan="2">C</th>
+            <th rowspan="2">I</th>
+            <th rowspan="2">S</th>
+            <th rowspan="2">A</th>
         </tr>
         <tr>
-            <?php 
-                for($i=1; $i<=31; $i++){
-            ?>
-                <th>{{$i}}</th>
-            <?php
-                }
-            ?>
+            @foreach ($rangeTanggal as $item)
+                @if($item != NULL)
+                    <th>{{date("d", strtotime($item))}}</th>
+                @endif
+            @endforeach
         </tr>
-        @foreach($rekap as $item)
+        @foreach($rekap as $res)
         <tr>
-            <td>{{ $item->nik }}</td>
-            <td>{{ $item->nama_lengkap }}</td>
-            <?php 
-                $totalhadir = 0;
-                $totalterlambat = 0;
-                for($i=1; $i<=31; $i++){
+            <td>{{ $res->nik }}</td>
+            <td>{{ $res->nama_lengkap }}</td>
+            @php
+                $jHadir = 0;
+                $jIzin = 0;
+                $jSakit = 0;
+                $jCuti = 0;
+                $jAbsen = 0;
+                $color = "";
+                $status = "";
+            @endphp
+            @for ($i = 1; $i <= $jumlahHari; $i++)
+                @php
                     $tgl = "tgl_".$i;
-                    if(empty($item->$tgl)){
-                        $hadir = ['',''];
-                        $totalhadir += 0;
+                    $datapresensi = explode("|", $res->{$tgl});
+                    if($res->{$tgl} != NULL) {
+                        $status = $datapresensi[2];
                     } else {
-                        $hadir = explode("-", $item->$tgl);
-                        $totalhadir += 1;
-                        if($hadir[0] > $item->jam_masuk) {
-                            $totalterlambat += 1;
-                        }
+                        $status = "";
                     }
-            ?>
-                <td>
-                    <span style="color:{{ $hadir[0] > $item->jam_masuk ? 'red' : '' }}">{{ !empty($hadir[0]) ? $hadir[0] : '-' }}</span><br>
-                    <span style="color:{{ $hadir[1] < $item->jam_pulang ? 'red' : '' }}">{{ !empty($hadir[1]) ? $hadir[1] : '-' }}</span>
-                </td>                
-            <?php
-                }
-            ?>
-            <td>{{ $totalhadir }}</td>
-            <td>{{ $totalterlambat }}</td>
+
+                    if($status == "h"){
+                        $jHadir += 1;
+                        $color = "white";
+                    }
+                    if($status == "c"){
+                        $jCuti += 1;
+                        $color = "yellow";
+                    }
+                    if($status == "i"){
+                        $jIzin += 1;
+                        $color = "orange";
+                    }
+                    if($status == "s"){
+                        $jSakit += 1;
+                        $color = "blue";
+                    }
+                    if(empty($status)){
+                        $jAbsen += 1;
+                        $color = "red";
+                    }
+                @endphp                
+                <td style="background-color: {{$color}}">{{$status}}</td>
+            @endfor
+            <td>{{!empty($jHadir) ? $jHadir : ""}}</td>
+            <td>{{!empty($jCuti) ? $jCuti : ""}}</td>
+            <td>{{!empty($jIzin) ? $jIzin : ""}}</td>
+            <td>{{!empty($jSakit) ? $jSakit : ""}}</td>
+            <td>{{!empty($jAbsen) ? $jAbsen : ""}}</td>
+            
         </tr>
+
         @endforeach
     </table>
 

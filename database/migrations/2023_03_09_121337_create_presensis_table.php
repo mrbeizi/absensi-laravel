@@ -24,6 +24,8 @@ return new class extends Migration
             $table->text('location_in')->nullable();
             $table->text('location_out')->nullable();
             $table->string('kode_jam_kerja')->nullable();
+            $table->string('status',1)->nullable();
+            $table->string('kode_izin',10)->nullable();
             $table->timestamps();
         });
     }

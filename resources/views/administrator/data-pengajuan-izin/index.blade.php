@@ -122,7 +122,7 @@
                                         <td>{{ $item->nik }}</td>
                                         <td>{{ $item->nama_lengkap }}</td>
                                         <td>{{ $item->jabatan }}</td>
-                                        <td>{{ date("d-m-Y", strtotime($item->tgl_izin)) }}</td>
+                                        <td>{{ date("d-m-Y", strtotime($item->tgl_izin_dari)) }} s.d {{ date("d-m-Y", strtotime($item->tgl_izin_sampai)) }}</td>
                                         <td>{{ $item->status == "i" ? "Izin" : "Sakit" }}</td>
                                         <td>{{ $item->keterangan }}</td>
                                         <td>
@@ -136,11 +136,11 @@
                                         </td>
                                         <td>
                                             @if($item->status_approved == 0)
-                                            <a href="#" id="approve" idpengajuan="{{$item->id}}">
+                                            <a href="#" class="approve" idpengajuan="{{$item->kode_izin}}">
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11l3 3l8 -8" /><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" /></svg>
                                             </a>
                                             @else
-                                            <a href="/presensi/{{$item->id}}/batalkanizinsakit" class="btn btn-sm btn-danger">
+                                            <a href="/presensi/{{$item->kode_izin}}/batalkanizinsakit" class="btn btn-sm btn-danger">
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up-double"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 14l-4 -4l4 -4" /><path d="M8 14l-4 -4l4 -4" /><path d="M9 10h7a4 4 0 1 1 0 8h-1" /></svg>
                                                 Batalkan</a>
                                             @endif
@@ -187,7 +187,7 @@
 @push('myscript')
 <script>
     $(function() {
-        $('#approve').click(function(e){
+        $('.approve').click(function(e){
             e.preventDefault();
             var id_pengajuan = $(this).attr('idpengajuan');
             $('#idizinsakit').val(id_pengajuan);
