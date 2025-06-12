@@ -101,36 +101,70 @@
                 <th>Tanggal</th>
                 <th>Jam Masuk</th>
                 <th>Jam Pulang</th>
+                <th>Status</th>
                 <th>Keterangan</th>
                 <th>Jumlah Jam</th>
             </tr>
         </thead>
         <tbody>
             @foreach($presensi as $item)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ date("d-m-Y", strtotime($item->tgl_presensi)) }}</td>
-                <td>{{ $item->jam_in != null ? $item->jam_in : 'Belum absen' }}</td>
-                <td>{{ $item->jam_out != null ? $item->jam_out : 'Belum absen' }}</td>
-                <td>
-                    @if($item->jam_in > $item->jam_masuk) 
-                    @php
-                        $jam_terlambat = selisih($item->jam_masuk, $item->jam_in);
-                    @endphp Terlambat {{$jam_terlambat}}
-                    @else Tepat Waktu
-                    @endif
-                </td>
-                <td>
-                    @if ($item->jam_out != null)
-                        @php
-                            $jamkerja = selisih($item->jam_in, $item->jam_out);
-                        @endphp
-                    @else
-                       @php  $jamkerja = 0; @endphp
-                    @endif
-                    {{$jamkerja}}
-                </td>
-            </tr>
+                @if($item->status == "h")
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ date("d-m-Y", strtotime($item->tgl_presensi)) }}</td>
+                        <td>{{ $item->jam_in != null ? $item->jam_in : 'Belum absen' }}</td>
+                        <td>{{ $item->jam_out != null ? $item->jam_out : 'Belum absen' }}</td>
+                        <td>@php
+                            $statusLabels = [
+                                'h' => '<span class="badge bg-success">Hadir</span>',
+                                's' => '<span class="badge bg-danger">Sakit</span>',
+                                'i' => '<span class="badge bg-warning">Izin</span>',
+                                'c' => '<span class="badge bg-purple">Cuti</span>'
+                            ];
+                            @endphp
+
+                            {!! $statusLabels[$item->status] ?? '<span class="badge bg-secondary">Tidak Diketahui</span>' !!}
+                        </td>
+                        <td>
+                            @if($item->jam_in > $item->jam_masuk) 
+                            @php
+                                $jam_terlambat = selisih($item->jam_masuk, $item->jam_in);
+                            @endphp Terlambat {{$jam_terlambat}}
+                            @else Tepat Waktu
+                            @endif
+                        </td>
+                        <td>
+                            @if ($item->jam_out != null)
+                                @php
+                                    $jamkerja = selisih($item->jam_in, $item->jam_out);
+                                @endphp
+                            @else
+                            @php  $jamkerja = 0; @endphp
+                            @endif
+                            {{$jamkerja}}
+                        </td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ date("d-m-Y", strtotime($item->tgl_presensi)) }}</td>
+                        <td>&ndash;</td>
+                        <td>&ndash;</td>
+                        <td>@php
+                            $statusLabels = [
+                                'h' => '<span class="badge bg-success">Hadir</span>',
+                                's' => '<span class="badge bg-danger">Sakit</span>',
+                                'i' => '<span class="badge bg-warning">Izin</span>',
+                                'c' => '<span class="badge bg-purple">Cuti</span>'
+                            ];
+                            @endphp
+
+                            {!! $statusLabels[$item->status] ?? '<span class="badge bg-secondary">Tidak Diketahui</span>' !!}
+                        </td>
+                        <td>{{ $item->keterangan }}</td>
+                        <td></td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

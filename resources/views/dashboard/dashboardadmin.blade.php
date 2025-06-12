@@ -31,7 +31,7 @@
                         </div>
                         <div class="col">
                         <div class="font-weight-medium">
-                            {{$recapData->sum_presence != null ? $recapData->sum_presence : 0}}
+                            {{$recapData->jmlhadir != null ? $recapData->jmlhadir : 0}}
                         </div>
                         <div class="text-muted">
                             Karyawan Hadir

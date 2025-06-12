@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $yearNow = date('Y');
 
         # Recap data absensi
-        $recapData = DB::table('presensis')->selectRaw('COUNT(nik) as sum_presence, SUM(IF(jam_in > jam_masuk,1,0)) as sum_late')
+        $recapData = DB::table('presensis')->selectRaw('SUM(IF(jam_in > jam_masuk,1,0)) as sum_late, SUM(IF(status="h",1,0)) as jmlhadir')
             ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
             ->where('nik',$nik)
             ->whereRaw('MONTH(tgl_presensi)="'.$thisMonth.'"')
@@ -41,7 +41,7 @@ class DashboardController extends Controller
 
         # rekapIzin\
         $recapIzin = DB::table('pengajuan_izins')
-            ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
+            ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit, , SUM(IF(status="c",1,0)) as jmlcuti')
             ->where('nik',$nik)
             ->whereRaw('MONTH(tgl_izin_dari)="'.$thisMonth.'"')
             ->whereRaw('YEAR(tgl_izin_dari)="'.$thisYear.'"')
@@ -54,12 +54,12 @@ class DashboardController extends Controller
     public function dashboardadmin(Request $request)
     {
         $today = date("Y-m-d");
-        $recapData = DB::table('presensis')->selectRaw('COUNT(nik) as sum_presence, SUM(IF(jam_in > "07:00",1,0)) as sum_late')
+        $recapData = DB::table('presensis')->selectRaw('SUM(IF(jam_in > "07:00",1,0)) as sum_late, SUM(IF(status="h",1,0)) as jmlhadir')
             ->where('tgl_presensi',$today)
             ->first();
         
         $recapIzin = DB::table('pengajuan_izins')
-            ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
+            ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit, SUM(IF(status="c",1,0)) as jmlcuti')
             ->where('tgl_izin_dari',$today)
             ->where('status_approved',1)
             ->first();

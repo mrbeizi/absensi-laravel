@@ -95,7 +95,7 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/konfigurasi/updatesetjamkerja',[KonfigurasiController::class,'updatesetjamkerja']);
 
     // Jam Kerja Departemen
-    Route::get('/konfigurasi/jamkerjadept',[KonfigurasiController::class,'jamkerjadept'])->name('jam-kerja-department');
+    Route::get('/jamkerjadepartment',[KonfigurasiController::class,'jamkerjadept'])->name('jam-kerja-department');
     Route::post('/jamkerjadepartment/store',[KonfigurasiController::class,'simpanjamkerjadepartment']);
     Route::post('/jamkerjadepartment/edit',[KonfigurasiController::class,'editjamkerjadepartment']);
     Route::post('/jamkerjadepartment/{kode_jamker_dept}/destroy',[KonfigurasiController::class,'destroyjamkerdepartment']);

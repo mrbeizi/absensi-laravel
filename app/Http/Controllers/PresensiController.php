@@ -390,8 +390,10 @@ class PresensiController extends Controller
         $tahun = $request->tahun;
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         $karyawan = Karyawan::where('nik',$nik)->join('departments','departments.kode_dept','=','karyawans.kode_dept')->first();
-        $presensi = DB::table('presensis')->where('nik',$nik)
+        $presensi = DB::table('presensis')->where('presensis.nik',$nik)
+            ->select('presensis.*','jam_kerjas.*','pengajuan_izins.keterangan')
             ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
+            ->leftJoin('pengajuan_izins','pengajuan_izins.kode_izin','=','presensis.kode_izin')
             ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
             ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
             ->orderBy('tgl_presensi')

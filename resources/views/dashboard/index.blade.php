@@ -138,7 +138,7 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 10px 8px !important; line-height:0.8rem;">
-                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">{{$recapData->sum_presence}}</span>
+                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">{{$recapData->jmlhadir}}</span>
                             <ion-icon name="checkmark-circle" style="font-size: 1.4rem" class="text-success"></ion-icon><br>
                             <span style="font-size: 0.5rem">Hadir</span>
                         </div>
