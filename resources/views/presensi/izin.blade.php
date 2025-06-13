@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="position: fixed; width: 100%; margin: auto; overflow-y: scroll; height: 600px;">
         <div class="col ml-2 mr-2">
             @foreach($datas as $data)
             <div class="card mb-1 card_izin" kodeizin="{{$data->kode_izin}}" statusapproved="{{$data->status_approved}}" data-toggle="modal" data-target="#actionSheetIconed">

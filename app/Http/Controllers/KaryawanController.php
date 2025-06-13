@@ -146,4 +146,16 @@ class KaryawanController extends Controller
         }
     }
 
+    public function resetpassword($nik)
+    {
+        $reset = Karyawan::where('nik',$nik)->update([
+            'password' => Hash::make($nik)
+        ]);
+        if($reset){
+            return redirect()->back()->with(['success' => 'Password berhasil direset']);
+        } else {
+            return redirect()->back()->with(['warning' => 'Password gagal direset']);
+        }
+    }
+
 }

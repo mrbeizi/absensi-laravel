@@ -96,7 +96,9 @@ class PresensiController extends Controller
         $image        = $request->image;
         $folderPath   = "public/uploads/absensi/";
 
-        $check        = DB::table('presensis')->where([['tgl_presensi',$tgl_presensi],['nik',$nik]])->count();
+        $presensi     = DB::table('presensis')->where([['tgl_presensi',$tgl_presensi],['nik',$nik]]);
+        $check        = $presensi->count();
+        $datapresensi = $presensi->first();
 
         # To store different file name
         if($check > 0) {
@@ -148,6 +150,8 @@ class PresensiController extends Controller
             if ($check > 0){ # Check data exist or not
                 if($jam < $jamKerja->jam_pulang){
                     echo "error|Sorry, it's not time to go home yet!|out";
+                } else if(!empty($datapresensi->jam_out)) {
+                    echo "error|Sorry, you have checked out!|out";
                 } else {
                     $data_pulang = [
                         'jam_out'      => $jam,
@@ -272,10 +276,14 @@ class PresensiController extends Controller
         $nik = Auth::guard('karyawan')->user()->nik;
 
         $history = DB::table('presensis')
+            ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
+            ->leftJoin('pengajuan_izins','pengajuan_izins.kode_izin','=','presensis.kode_izin')
+            ->leftJoin('master_cutis','master_cutis.kode_cuti','=','pengajuan_izins.kode_cuti')
+            ->select('presensis.*','jam_kerjas.*','pengajuan_izins.keterangan','docs_sid','nama_cuti')
             ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
             ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
-            ->where('nik',$nik)
-            ->orderBy('tgl_presensi')
+            ->where('presensis.nik',$nik)
+            ->orderBy('tgl_presensi','DESC')
             ->get();
 
         return view('presensi.get-history', compact('history'));

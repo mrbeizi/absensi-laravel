@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-    <div class="section mt-2" id="presence-section">
+    <div class="section mt-2" id="presence-section" style="position: fixed; width: 100%; margin: auto; overflow-y: scroll; height: 620px;">
         <div class="todaypresence">
             <div class="row">
                 <div class="col-6">
@@ -147,7 +147,7 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 10px 8px !important; line-height:0.8rem;">
-                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">@if($recapIzin->jmlizin == 0) 0 @else{{$recapIzin->jmlizin}} @endif</span>
+                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">@if($recapData->jmlizin == 0) 0 @else{{$recapData->jmlizin}} @endif</span>
                             <ion-icon name="remove-circle" style="font-size: 1.4rem" class="text-primary"></ion-icon><br>
                             <span style="font-size: 0.5rem">Izin</span>
                         </div>
@@ -156,7 +156,7 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 10px 8px !important; line-height:0.8rem;">
-                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">@if($recapIzin->jmlsakit == 0) 0 @else {{$recapIzin->jmlsakit}} @endif</span>
+                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">@if($recapData->jmlsakit == 0) 0 @else {{$recapData->jmlsakit}} @endif</span>
                             <ion-icon name="sad" style="font-size: 1.4rem" class="text-warning"></ion-icon><br>
                             <span style="font-size: 0.5rem">Sakit</span>
                         </div>
@@ -165,9 +165,9 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 10px 8px !important; line-height:0.8rem;">
-                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">{{$recapData->sum_late}}</span>
-                            <ion-icon name="alarm" style="font-size: 1.4rem" class="text-danger"></ion-icon><br>
-                            <span style="font-size: 0.5rem">Telat</span>
+                            <span class="badge badge-danger" style="position:absolute; top:2px; right:5px; font-size:0.7rem; z-index:999;">{{$recapData->jmlcuti}}</span>
+                            <ion-icon name="calendar-outline" style="font-size: 1.4rem" class="text-danger"></ion-icon><br>
+                            <span style="font-size: 0.5rem">Cuti</span>
                         </div>
                     </div>
                 </div>

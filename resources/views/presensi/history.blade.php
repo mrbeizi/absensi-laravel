@@ -18,45 +18,35 @@
     <div class="row" style="margin-top: 4rem;">
         <div class="col">
             <div class="row">
-                <div class="col-12">
+                <div class="col-8">
                     <div class="form-group">
-                        <select name="bulan" id="bulan" class="form-control">
-                            <option value="" class="text-mute">- Select month -</option>
-                            @for($i=1; $i<=12; $i++)
-                                <option value="{{$i}}" {{ date('m') == $i ? 'selected' : ''}}>{{$monthName[$i]}}</option>
+                        <select name="bulan" id="bulan" class="form-select custom-select">
+                            <option value="">Bulan</option>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <option {{Request('bulan') == $i ? 'selected' : ''}} value="{{$i}}">{{$monthName[$i]}}</option>
                             @endfor
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+                <div class="col-4">
                     <div class="form-group">
-                        <select name="tahun" id="tahun" class="form-control">
-                            <option value="">Year</option>
-                            @php
-                                $startYear = 2022;
-                                $endYear = date('Y');
-                            @endphp
-                            @for($tahun=$startYear; $tahun<=$endYear; $tahun++)
-                                <option value="{{$tahun}}" {{ date('Y') == $tahun ? 'selected' : ''}}>{{$tahun}}</option>
+                        <select name="tahun" id="tahun" class="form-select custom-select">
+                            <option value="">Tahun</option>
+                            @for ($year = 2022; $year <= date('Y'); $year++)
+                                <option {{Request('tahun') == $year ? 'selected' : ''}} value={{$year}}>{{$year}}</option>
                             @endfor
                         </select>
                     </div>
-                </div>
+                </div>                        
             </div>
-            <div class="row">
+            <div class="row mb-2">
                 <div class="col-12">
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-block" id="button-search">
-                            <ion-icon name="search-outline"></ion-icon>
-                            Search</button>
-                    </div>
+                    <button class="btn btn-primary btn-sm w-100" id="button-search"><ion-icon name="search-outline"></ion-icon> Cari</button>
                 </div>
             </div>
         </div>
     </div>  
-    <div class="row">
+    <div class="row" style="position: fixed; width: 100%; margin: auto; overflow-y: scroll; height: 620px;">
         <div class="col" id="showHistory"></div>
     </div>  
 @endsection

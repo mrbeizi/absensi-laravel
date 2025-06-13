@@ -47,6 +47,7 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/karyawan/edit',[KaryawanController::class,'edit']);
     Route::post('/karyawan/{nik}/update',[KaryawanController::class,'update']);
     Route::post('/karyawan/{nik}/destroy',[KaryawanController::class,'destroy']);
+    Route::get('/karyawan/{nik}/resetpassword',[KaryawanController::class,'resetpassword']);
 
     // Department
     Route::get('/department',[DepartmentController::class, 'index'])->name('index-department');

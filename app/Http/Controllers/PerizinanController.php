@@ -32,9 +32,12 @@ class PerizinanController extends Controller
 
         # melakukan pengecekan data tanggal pengajuan absen dengan presensi
         $check = DB::table('presensis')
-            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai])
+            ->where('nik',Auth::guard('karyawan')->user()->nik);
             $datapresensi = $check->get();
-            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+            $checkpengajuan = DB::table('pengajuan_izins')
+                ->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai')
+                ->where('nik',Auth::guard('karyawan')->user()->nik);
 
         if($check->count() > 0 || $checkpengajuan->count() > 0){
             return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
@@ -52,9 +55,9 @@ class PerizinanController extends Controller
             ]);
     
             if($post){
-                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diajukan!']);
             } else {
-                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diajukan!']);
             }
         }
 
@@ -70,9 +73,12 @@ class PerizinanController extends Controller
     {
         # melakukan pengecekan data tanggal pengajuan absen dengan presensi
         $check = DB::table('presensis')
-            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai])
+            ->where('nik',Auth::guard('karyawan')->user()->nik);
             $datapresensi = $check->get();
-            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+            $checkpengajuan = DB::table('pengajuan_izins')
+                ->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai')
+                ->where('nik',Auth::guard('karyawan')->user()->nik);
 
         if($check->count() > 0 || $checkpengajuan->count() > 0){
             return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
@@ -121,9 +127,12 @@ class PerizinanController extends Controller
 
         # melakukan pengecekan data tanggal pengajuan absen dengan presensi
         $check = DB::table('presensis')
-            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai])
+            ->where('nik',Auth::guard('karyawan')->user()->nik);
             $datapresensi = $check->get();
-            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+            $checkpengajuan = DB::table('pengajuan_izins')
+                ->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai')
+                ->where('nik',Auth::guard('karyawan')->user()->nik);
 
         if($check->count() > 0 || $checkpengajuan->count() > 0){
             return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
@@ -147,9 +156,9 @@ class PerizinanController extends Controller
                     $folderPath = "public/uploads/sid";
                     $request->file('sid')->storeAs($folderPath, $sid);
                 }
-                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diajukan!']);
             } else {
-                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diajukan!']);
             }
         }
         
@@ -171,9 +180,12 @@ class PerizinanController extends Controller
 
         # melakukan pengecekan data tanggal pengajuan absen dengan presensi
         $check = DB::table('presensis')
-            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai])
+            ->where('nik',Auth::guard('karyawan')->user()->nik);
             $datapresensi = $check->get();
-            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+            $checkpengajuan = DB::table('pengajuan_izins')
+                ->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai')
+                ->where('nik',Auth::guard('karyawan')->user()->nik);
 
         if($check->count() > 0 || $checkpengajuan->count() > 0){
             return redirect()->route('presensi-izin')->with(['error' => 'Tidak bisa melakukan pengajuan pada tanggal tersebut. Silakan ganti tanggal pengajuan!']);
@@ -233,9 +245,12 @@ class PerizinanController extends Controller
 
         # melakukan pengecekan data tanggal pengajuan absen dengan presensi
         $check = DB::table('presensis')
-            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai])
+            ->where('nik',Auth::guard('karyawan')->user()->nik);
             $datapresensi = $check->get();
-            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+            $checkpengajuan = DB::table('pengajuan_izins')
+                ->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai')
+                ->where('nik',Auth::guard('karyawan')->user()->nik);
 
         if($countday > $sisacuti) {
             return redirect()->route('presensi-izin')->with(['error' => 'Sisa cuti anda tidak cukup. Sisa cuti '.$datacuti->nama_cuti.' anda adalah '.$sisacuti.' hari']);
@@ -256,9 +271,9 @@ class PerizinanController extends Controller
             ]);
     
             if($post){
-                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil disimpan!']);
+                return redirect()->route('presensi-izin')->with(['success' => 'Data berhasil diajukan!']);
             } else {
-                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal disimpan!']);
+                return redirect()->route('presensi-izin')->with(['error' => 'Data gagal diajukan!']);
             }
         }
 
@@ -282,9 +297,12 @@ class PerizinanController extends Controller
 
         # melakukan pengecekan data tanggal pengajuan absen dengan presensi
         $check = DB::table('presensis')
-            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai]);
+            ->whereBetween('tgl_presensi',[$request->tgl_izin_dari, $request->tgl_izin_sampai])
+            ->where('nik',Auth::guard('karyawan')->user()->nik);
             $datapresensi = $check->get();
-            $checkpengajuan = DB::table('pengajuan_izins')->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai');
+            $checkpengajuan = DB::table('pengajuan_izins')
+                ->whereRaw('"'.$request->tgl_izin_dari.'" BETWEEN tgl_izin_dari AND tgl_izin_sampai')
+                ->where('nik',Auth::guard('karyawan')->user()->nik);
 
         if($countday > $sisacuti) {
             return redirect()->route('presensi-izin')->with(['error' => 'Sisa cuti anda tidak cukup. Sisa cuti '.$datacuti->nama_cuti.' anda adalah '.$sisacuti.' hari']);

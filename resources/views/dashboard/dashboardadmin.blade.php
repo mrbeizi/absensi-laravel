@@ -11,7 +11,7 @@
             Overview
         </div>
         <h2 class="page-title">
-            Dashboard
+            Dashboard &mdash; Presensi hari ini {{ date('d-m-Y', strtotime(date('Y-m-d')))}}
         </h2>
         </div>        
     </div>
@@ -74,7 +74,7 @@
                         </div>
                         <div class="col">
                         <div class="font-weight-medium">
-                            {{ $recapIzin->jmlizin != null ? $recapIzin->jmlizin : 0}}
+                            {{ $recapData->jmlizin != null ? $recapData->jmlizin : 0}}
                         </div>
                         <div class="text-muted">
                             Karyawan Izin
@@ -95,7 +95,7 @@
                         </div>
                         <div class="col">
                         <div class="font-weight-medium">
-                            {{ $recapIzin->jmlsakit != null ? $recapIzin->jmlsakit : 0}}
+                            {{ $recapData->jmlsakit != null ? $recapData->jmlsakit : 0}}
                         </div>
                         <div class="text-muted">
                             Karyawan Sakit
