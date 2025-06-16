@@ -34,3 +34,20 @@
         $kode = $kunci . $nomor_baru_plus_nol;
         return $kode;
     }
+
+    function countOfficeHours($jam_in, $jam_out)
+    {
+        $j1 = strtotime($jam_in);
+        $j2 = strtotime($jam_out);
+        $diff = $j2 - $j1;
+        if (empty($j2)) {
+            $jam = 0;
+            $menit = 0;
+        } else {
+            $jam = floor($diff / (60 * 60));
+            $m = $diff - $jam * (60 * 60);
+            $menit = floor($m / 60);
+        }
+    
+        return $jam ."h ". $menit ."m";
+    }

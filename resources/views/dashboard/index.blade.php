@@ -236,7 +236,7 @@
                                                 {!! $history->jam_in != null ? date("H:i", strtotime($history->jam_in)) : '<span class="text-danger">Belum scan</span>' !!}
                                             </span>
                                             <span>
-                                                {!! $history->jam_out != null ? "-". date("H:i", strtotime($history->jam_out)) : '<span class="text-danger"> - Belum scan</span>' !!}
+                                                {!! $history->jam_out != null ? "- ". date("H:i", strtotime($history->jam_out)) : '<span class="text-danger"> - Belum scan</span>' !!}
                                             </span><br>
                                             <div class="mt-2" id="keterangan">
                                                 @php

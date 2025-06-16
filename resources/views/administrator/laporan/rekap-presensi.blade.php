@@ -27,7 +27,7 @@
                             @csrf
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-3">
                                         <select name="bulan" id="bulan" class="form-select">
                                             <option value="">- Pilih Bulan -</option>
                                             @for($i=1; $i<=12; $i++)
@@ -35,7 +35,7 @@
                                             @endfor
                                         </select>
                                     </div>
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-3">
                                         <select name="tahun" id="tahun" class="form-select">
                                             <option value="">- Pilih Tahun -</option>
                                             @php
@@ -45,6 +45,14 @@
                                             @for($tahun=$startYear; $tahun<=$endYear; $tahun++)
                                                 <option value="{{$tahun}}" {{ date('Y') == $tahun ? 'selected' : ''}}>{{$tahun}}</option>
                                             @endfor
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <select name="kode_dept" id="kode_dept" class="form-select">
+                                            <option value="">- Semua Departemen -</option>
+                                            @foreach ($getDepartment as $dept)
+                                            <option value="{{$dept->kode_dept}}">{{$dept->nama_dept}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">

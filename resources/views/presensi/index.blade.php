@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="jam-digital">
-        <p>{{date('d-m-Y')}}</p>
+        <p>{{date('d-m-Y', strtotime($today))}}</p>
         <p id="jam"></p>
         <p>{{$jamKerja->nama_jam_kerja}}</p>
         <p>Mulai: {{date("H:i", strtotime($jamKerja->awal_jam_masuk))}}</p>

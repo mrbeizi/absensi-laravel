@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Karyawan;
 use App\Models\Cabang;
+use App\Models\Department;
 use App\Models\PengajuanIzin;
 use App\Models\KonfigurasiJamKerja;
 use App\Models\KonfigurasiJamKerjaDepartmentDetail;
@@ -15,9 +16,9 @@ use DB;
 
 class PresensiController extends Controller
 {
-    public function getHari()
+    public function getHari($hari)
     {
-        $hari = date("D");
+        // $hari = date("D");
         switch ($hari) {
             case 'Sun':
                 $hariIni = "Minggu";
@@ -57,10 +58,32 @@ class PresensiController extends Controller
     public function index()
     {
         $today       = date('Y-m-d');
-        $namaHari    = $this->getHari();
         $nik         = Auth::guard('karyawan')->user()->nik;
+
+        # pengecekan jadwal lintas hari
+        $prevDay     = date('Y-m-d', strtotime("-1 days", strtotime($today)));
+        $nowHours    = date('H:i');
+        
+        # pengecekan presensi hari sebelumnya
+        $checkPre = DB::table('presensis')
+            ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
+            ->where('tgl_presensi',$prevDay)
+            ->where('nik',$nik)
+            ->first();
+
+        $checkLintasHari = $checkPre != null ? $checkPre->lintas_hari : 0;
+
+        if($checkLintasHari == '1') {
+            if($nowHours < "08:00") { # Ini fleksibel disesuaikan dengan pengaturan jam kerja
+                $today = $prevDay;
+            }
+        }
+
+        $namaHari    = $this->getHari(date('D', strtotime($today)));
+
         $kode_dept   = Auth::guard('karyawan')->user()->kode_dept;
-        $check       = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();
+        $check       = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();       
+
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $office_loc  = Cabang::where('kode_cabang',$kode_cabang)->first();
         $jamKerja    = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')
@@ -81,16 +104,32 @@ class PresensiController extends Controller
         if($jamKerja == null){
             return view('presensi.notif-jadwal');
         } else {
-            return view('presensi.index', compact('check','office_loc','jamKerja'));
+            return view('presensi.index', compact('check','office_loc','jamKerja','today'));
         }
     }
 
     public function store(Request $request)
     {
         $nik          = Auth::guard('karyawan')->user()->nik;
+
+        $today       = date('Y-m-d');
+
+        # pengecekan jadwal lintas hari
+        $prevDay     = date('Y-m-d', strtotime("-1 days", strtotime($today)));
+        $nowHours    = date('H:i');
+
+        # pengecekan presensi hari sebelumnya
+        $checkPre = DB::table('presensis')
+            ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
+            ->where('tgl_presensi',$prevDay)
+            ->where('nik',$nik)
+            ->first();
+
+        $checkLintasHari = $checkPre != null ? $checkPre->lintas_hari : 0;
+
         $kode_dept    = Auth::guard('karyawan')->user()->kode_dept;
         $kode_cabang  = Auth::guard('karyawan')->user()->kode_cabang;
-        $tgl_presensi = date('Y-m-d');
+        $tgl_presensi = $checkLintasHari == '1' && $nowHours < "08:00" ? $prevDay : date('Y-m-d');
         $jam          = date('H:i:s');
         $lokasi       = $request->lokasi;
         $image        = $request->image;
@@ -127,7 +166,7 @@ class PresensiController extends Controller
         $radius = round($dis["meters"]);  
         
         # Cek Jam Kerja
-        $namaHari = $this->getHari();
+        $namaHari = $this->getHari(date('D', strtotime($tgl_presensi)));
         $jamKerja = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')
             ->where('nik',$nik)
             ->where('hari',$namaHari)
@@ -145,7 +184,7 @@ class PresensiController extends Controller
 
         # pengecekan jadwal lintas hari
         $tgl_pulang = $jamKerja->lintas_hari == '1' ? date('Y-m-d', strtotime("+ 1 days", strtotime($tgl_presensi))) : $tgl_presensi;
-        $jam_pulang = $tgl_presensi . "" . $jam;
+        $jam_pulang = $today . "" . $jam;
         $jamker_pulang = $tgl_pulang . "" . $jamKerja->jam_pulang;
 
         # Check radius
@@ -427,13 +466,15 @@ class PresensiController extends Controller
     public function rekap(Request $request)
     {
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-        return view('administrator.laporan.rekap-presensi', compact('monthName'));
+        $getDepartment = Department::all();
+        return view('administrator.laporan.rekap-presensi', compact('monthName','getDepartment'));
     }
 
     public function cetakrekap(Request $request)
     {
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $kodeDept = $request->kode_dept;
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         $dari = sprintf("%d-%02d-01", $tahun, $bulan);
         $sampai = date('Y-m-t', strtotime($dari));
@@ -492,6 +533,9 @@ class PresensiController extends Controller
 
         $query->groupBy('karyawans.nik', 'karyawans.nama_lengkap', 'karyawans.jabatan');
 
+        if(!empty($kodeDept)) {
+            $query->where('kode_dept',$kodeDept);
+        }
         $query->orderBy('nama_lengkap');
         $rekap = $query->get();
         

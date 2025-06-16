@@ -27,7 +27,7 @@
                             @csrf
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-3">
                                         <select name="bulan" id="bulan" class="form-select">
                                             <option value="">- Pilih Bulan -</option>
                                             @for($i=1; $i<=12; $i++)
@@ -35,7 +35,7 @@
                                             @endfor
                                         </select>
                                     </div>
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-3">
                                         <select name="tahun" id="tahun" class="form-select">
                                             <option value="">- Pilih Tahun -</option>
                                             @php
@@ -47,7 +47,7 @@
                                             @endfor
                                         </select>
                                     </div>
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-3">
                                         <select name="nik" id="nik" class="form-select">
                                             <option value="">- Pilih Karyawan -</option>
                                             @foreach($karyawan as $data)

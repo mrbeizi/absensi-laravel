@@ -128,7 +128,7 @@
                         <td>
                             @if($item->jam_in > $item->jam_masuk) 
                             @php
-                                $jam_terlambat = selisih($item->jam_masuk, $item->jam_in);
+                                $jam_terlambat = countOfficeHours($item->jam_masuk, $item->jam_in);
                             @endphp Terlambat {{$jam_terlambat}}
                             @else Tepat Waktu
                             @endif
@@ -136,7 +136,11 @@
                         <td>
                             @if ($item->jam_out != null)
                                 @php
-                                    $jamkerja = selisih($item->jam_in, $item->jam_out);
+                                    $tglMasuk = $item->tgl_presensi;
+                                    $tglPul = $item->lintas_hari == '1' ? date('Y-m-d', strtotime("+1 days", strtotime($tglMasuk))) : $tglMasuk;
+                                    $jamMasuk = $tglMasuk . "" .$item->jam_in;
+                                    $jamPulang = $tglPul . "" .$item->jam_out;
+                                    $jamkerja = countOfficeHours($jamMasuk, $jamPulang);
                                 @endphp
                             @else
                             @php  $jamkerja = 0; @endphp
