@@ -56,6 +56,13 @@
                                         </span>
                                         <input type="text" value="" name="nama_jam_kerja" id="nama_jam_kerja" class="form-control" placeholder="Nama jam kerja">
                                     </div>
+                                    <div class="input-icon mb-3">                                        
+                                        <select name="lintas_hari" id="lintas_hari" class="form-select text-muted">
+                                            <option value="">Apakah lintas hari ?</option>
+                                            <option {{ Request('lintas_hari') == '1' ? 'selected' : '' }} value="1">Ya</option>
+                                            <option {{ Request('lintas_hari') == '0' ? 'selected' : '' }} value="0">Tidak</option>
+                                        </select>
+                                    </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="input-icon mb-3">
@@ -112,12 +119,13 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Kode Jam Kerja</th>
-                                            <th>Nama Jam Kerja</th>
-                                            <th>Awal Jam Kerja</th>
+                                            <th>Kode</th>
+                                            <th>Nama</th>
+                                            <th>Mulai Presensi</th>
                                             <th>Jam Masuk</th>
-                                            <th>Akhir Jam Kerja</th>
+                                            <th>Akhir Presensi</th>
                                             <th>Jam Pulang</th>
+                                            <th>Lintas Hari</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -131,9 +139,16 @@
                                             <td>{{ $data->jam_masuk }}</td>
                                             <td>{{ $data->akhir_jam_masuk }}</td>
                                             <td>{{ $data->jam_pulang }}</td>
+                                            <td style="color: {{($data->lintas_hari == '0' ? 'red' : 'green')}}">
+                                                @if($data->lintas_hari == '0')
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-xbox-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10m3.6 5.2a1 1 0 0 0 -1.4 .2l-2.2 2.933l-2.2 -2.933a1 1 0 1 0 -1.6 1.2l2.55 3.4l-2.55 3.4a1 1 0 1 0 1.6 1.2l2.2 -2.933l2.2 2.933a1 1 0 0 0 1.6 -1.2l-2.55 -3.4l2.55 -3.4a1 1 0 0 0 -.2 -1.4" /></svg>
+                                                @else
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" /></svg>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="#" class="edit text-success" kodejamker="{{$data->kode_jam_kerja}}" namajamker="{{$data->nama_jam_kerja}}" awaljam={{$data->awal_jam_masuk}} jammasuk="{{$data->jam_masuk}}" akhirjam="{{$data->akhir_jam_masuk}}" jampulang="{{$data->jam_pulang}}">
+                                                    <a href="#" class="edit text-success" kodejamker="{{$data->kode_jam_kerja}}" namajamker="{{$data->nama_jam_kerja}}" awaljam={{$data->awal_jam_masuk}} jammasuk="{{$data->jam_masuk}}" akhirjam="{{$data->akhir_jam_masuk}}" jampulang="{{$data->jam_pulang}}" lintashari="{{$data->lintas_hari}}">
                                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                                     </a>&nbsp;&nbsp;
                                                     <form action="/jamkerja/{{ $data->kode_jam_kerja }}/destroy" method="POST">
@@ -171,6 +186,7 @@
             var jam_masuk = $(this).attr('jammasuk');
             var akhir_jam_masuk = $(this).attr('akhirjam');
             var jam_pulang = $(this).attr('jampulang');
+            var lintas_hari = $(this).attr('lintashari');
             $.ajax({
                 type: 'POST',
                 url: "/jamkerja/edit",
@@ -188,6 +204,7 @@
                     $('#jam_masuk').val(jam_masuk);
                     $('#akhir_jam_masuk').val(akhir_jam_masuk);
                     $('#jam_pulang').val(jam_pulang);
+                    $('#lintas_hari').val(lintas_hari).trigger('change');
                     $('.tombol-simpan').html(`
                     <div class="btn-group float-end">
                         <a href="{{route('jam-kerja')}}" class="btn btn-secondary">

@@ -51,6 +51,7 @@ class KonfigurasiController extends Controller
         $jam_masuk = $request->jam_masuk;
         $akhir_jam_masuk = $request->akhir_jam_masuk;
         $jam_pulang = $request->jam_pulang;
+        $lintas_hari = $request->lintas_hari;
 
         try {            
             if($request->hidkodejamker == ""){
@@ -61,6 +62,7 @@ class KonfigurasiController extends Controller
                     'jam_masuk' => $jam_masuk,
                     'akhir_jam_masuk' => $akhir_jam_masuk,
                     'jam_pulang' => $jam_pulang,
+                    'lintas_hari' => $lintas_hari,
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
@@ -75,6 +77,7 @@ class KonfigurasiController extends Controller
                     'jam_masuk' => $jam_masuk,
                     'akhir_jam_masuk' => $akhir_jam_masuk,
                     'jam_pulang' => $jam_pulang,
+                    'lintas_hari' => $lintas_hari,
                     'updated_at' => now()
                 ]);
                 if($simpan) {

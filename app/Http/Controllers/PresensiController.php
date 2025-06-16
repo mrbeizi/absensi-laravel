@@ -143,12 +143,17 @@ class PresensiController extends Controller
                 ->first();
         }
 
+        # pengecekan jadwal lintas hari
+        $tgl_pulang = $jamKerja->lintas_hari == '1' ? date('Y-m-d', strtotime("+ 1 days", strtotime($tgl_presensi))) : $tgl_presensi;
+        $jam_pulang = $tgl_presensi . "" . $jam;
+        $jamker_pulang = $tgl_pulang . "" . $jamKerja->jam_pulang;
+
         # Check radius
         if($radius > $office_loc->radius){
             echo "error|Sorry, you're out of radius ".$radius." meters|radius";
         } else {
             if ($check > 0){ # Check data exist or not
-                if($jam < $jamKerja->jam_pulang){
+                if($jam_pulang < $jamker_pulang){
                     echo "error|Sorry, it's not time to go home yet!|out";
                 } else if(!empty($datapresensi->jam_out)) {
                     echo "error|Sorry, you have checked out!|out";
@@ -156,7 +161,8 @@ class PresensiController extends Controller
                     $data_pulang = [
                         'jam_out'      => $jam,
                         'foto_out'     => $fileName,
-                        'location_out' => $lokasi
+                        'location_out' => $lokasi,
+                        'updated_at'   => now()
                     ];
                     $post = DB::table('presensis')->where([['tgl_presensi',$tgl_presensi],['nik',$nik]])->update($data_pulang);
                     if($post){
@@ -179,7 +185,9 @@ class PresensiController extends Controller
                         'foto_in'      => $fileName,
                         'location_in'  => $lokasi,
                         'kode_jam_kerja' => $jamKerja->kode_jam_kerja,
-                        'status'       => 'h'
+                        'status'       => 'h',
+                        'created_at'   => now(),
+                        'updated_at'   => now()
                     ];
                     $post = DB::table('presensis')->insert($data_masuk);
                     if($post){

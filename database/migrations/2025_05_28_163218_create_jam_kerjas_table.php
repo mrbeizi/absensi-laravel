@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('jam_masuk');
             $table->time('akhir_jam_masuk');
             $table->time('jam_pulang');
+            $table->string('lintas_hari',1)->default(0);
             $table->timestamps();
         });
     }
