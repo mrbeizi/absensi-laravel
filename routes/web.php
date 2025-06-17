@@ -11,6 +11,10 @@ use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\KantorCabangController;
 use App\Http\Controllers\PerizinanController;
 use App\Http\Controllers\MasterCutiController;
+use App\Http\Controllers\UserController;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +44,13 @@ Route::middleware(['guest:user'])->group(function(){
 Route::middleware(['auth:user'])->group(function(){
     Route::get('/proses-logout-admin',[AuthController::class,'prosesLogoutAdmin'])->name('proses-logout-admin');
     Route::get('/panel/dashboardadmin', [DashboardController::class,'dashboardadmin'])->name('dashboardadmin');
+
+    // Data user
+    Route::get('/data-user',[UserController::class, 'index'])->name('data-user');
+    Route::post('/data-user/store',[UserController::class,'simpan']);
+    Route::post('/data-user/edit',[UserController::class,'edit']);
+    Route::post('/data-user/{id}/update',[UserController::class,'update']);
+    Route::post('/data-user/{id}/destroy',[UserController::class,'destroy']);
 
     // Karyawan
     Route::get('/karyawan',[KaryawanController::class, 'index'])->name('index-karyawan');
