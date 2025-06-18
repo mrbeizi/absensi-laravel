@@ -72,6 +72,7 @@
                                             <th>Nama User</th>
                                             <th>Email</th>
                                             <th>Departemen</th>
+                                            <th>Kantor</th>
                                             <th>Role</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -83,6 +84,7 @@
                                             <td>{{$item->name}}</td>
                                             <td>{{$item->email}}</td>
                                             <td>{{$item->nama_dept}}</td>
+                                            <td>{{$item->nama_cabang}}</td>
                                             <td>{{$item->role}}</td>
                                             <td>
                                                 <div class="btn-group">
@@ -148,6 +150,14 @@
                                 <option value="">- Pilih Role -</option>
                                 @foreach ($roles as $r)
                                     <option value="{{$r->name}}">{{$r->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>                        
+                        <div class="input-icon mb-3">                                        
+                            <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                <option value="">- Pilih Kantor -</option>
+                                @foreach ($cabang as $c)
+                                    <option value="{{$c->kode_cabang}}">{{$c->nama_cabang}}</option>
                                 @endforeach
                             </select>
                         </div>                        
@@ -225,6 +235,7 @@
             var email = $('#email').val();
             var kode_dept = $('#kode_dept').val();
             var role = $('#role').val();
+            var kode_cabang = $('#kode_cabang').val();
 
             if(name == "") {
                 Swal.fire({
@@ -268,6 +279,17 @@
                     timer: 1500
                 }).then((result) => {
                     $('#role').focus();
+                });
+                return false;
+            } else if(kode_cabang == "") {
+                Swal.fire({
+                    title: 'Warning!',
+                    text: 'Anda belum memilih kode cabang',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    timer: 1500
+                }).then((result) => {
+                    $('#kode_cabang').focus();
                 });
                 return false;
             } 

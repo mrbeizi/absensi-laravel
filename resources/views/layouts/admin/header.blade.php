@@ -52,7 +52,7 @@
             <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
             <div class="d-none d-xl-block ps-2">
                 <div>{{Auth::guard('user')->user()->name}}</div>
-                <div class="mt-1 small text-muted">{{Auth::guard('user')->user()->email}}</div>
+                <div class="mt-1 small text-muted">{{ucwords(Auth::guard('user')->user()->roles->pluck('name')[0])}}</div>
             </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

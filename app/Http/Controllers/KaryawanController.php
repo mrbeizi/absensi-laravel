@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Karyawan;
 use App\Models\Cabang;
+use App\Models\User;
 use DB;
 use Auth;
 
@@ -14,6 +15,10 @@ class KaryawanController extends Controller
 {
     public function index(Request $request)
     {
+        # menerapkan role
+        $getKodeDept = Auth::guard('user')->user()->kode_dept;
+        $getUser = User::find(Auth::guard('user')->user()->id);
+
         $query = Karyawan::query();
         $query->select('karyawans.*','nama_dept','nama_cabang');
         $query->join('departments','karyawans.kode_dept','=','departments.kode_dept');
@@ -30,6 +35,10 @@ class KaryawanController extends Controller
 
         if(!empty($request->kd_cabang)){
             $query->where('cabangs.kode_cabang', $request->kd_cabang);
+        }
+
+        if($getUser->hasRole('Admin Departemen')) {
+            $query->where('departments.kode_dept',$getKodeDept);
         }
 
         $karyawan = $query->paginate(10);
