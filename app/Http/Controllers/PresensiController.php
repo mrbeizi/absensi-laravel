@@ -405,36 +405,49 @@ class PresensiController extends Controller
     // Presensi Monitoring
     public function monitoring(Request $request)
     {
-        return view('administrator.monitoring.index');
+        $department = Department::orderBy('kode_dept')->get();
+        $cabang = Cabang::orderBy('nama_cabang')->get();
+        return view('administrator.monitoring.index', compact('department','cabang'));
     }
 
     public function getpresensi(Request $request)
     {
         # menerapkan role
         $getKodeDept = Auth::guard('user')->user()->kode_dept;
+        $getKodeCabang = Auth::guard('user')->user()->kode_cabang;
         $getUser = User::find(Auth::guard('user')->user()->id);
 
         $tanggal = $request->tanggal;
-        if($getUser->hasRole('Admin Departemen')){
-            $presensi = DB::table('presensis')->select('presensis.*','nama_lengkap','karyawans.kode_dept','jam_masuk','nama_jam_kerja','jam_masuk','jam_pulang')
-                ->select('presensis.*','jam_kerjas.*','pengajuan_izins.keterangan','nama_dept','nama_lengkap','departments.kode_dept')
-                ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
-                ->leftJoin('pengajuan_izins','pengajuan_izins.kode_izin','=','presensis.kode_izin')
-                ->join('karyawans','karyawans.nik','=','presensis.nik')
-                ->join('departments','karyawans.kode_dept','=','departments.kode_dept')
-                ->where('tgl_presensi',$tanggal)
-                ->where('karyawans.kode_dept',$getKodeDept)
-                ->get();
-        } else if($getUser->hasRole('administrator')) {
-            $presensi = DB::table('presensis')->select('presensis.*','nama_lengkap','karyawans.kode_dept','jam_masuk','nama_jam_kerja','jam_masuk','jam_pulang')
-                ->select('presensis.*','jam_kerjas.*','pengajuan_izins.keterangan','nama_dept','nama_lengkap','departments.kode_dept')
-                ->leftJoin('jam_kerjas','jam_kerjas.kode_jam_kerja','=','presensis.kode_jam_kerja')
-                ->leftJoin('pengajuan_izins','pengajuan_izins.kode_izin','=','presensis.kode_izin')
-                ->join('karyawans','karyawans.nik','=','presensis.nik')
-                ->join('departments','karyawans.kode_dept','=','departments.kode_dept')
-                ->where('tgl_presensi',$tanggal)
-                ->get();
+
+        $query = Karyawan::query();
+        $query->select('karyawans.nik AS nik','nama_lengkap','karyawans.kode_dept','karyawans.kode_cabang','jam_in', 'jam_out', 'foto_in', 'foto_out', 'location_in', 'location_out', 'data.status', 'jam_masuk', 'nama_jam_kerja', 'jam_pulang', 'keterangan');
+        $query->leftJoin(
+            DB::raw("(
+            SELECT presensis.nik, jam_in, jam_out, foto_in, foto_out, location_in, location_out, presensis.status, jam_masuk, nama_jam_kerja, jam_pulang, keterangan
+            FROM presensis 
+            LEFT JOIN jam_kerjas ON presensis.kode_jam_kerja = jam_kerjas.kode_jam_kerja 
+            LEFT JOIN pengajuan_izins ON presensis.kode_izin = pengajuan_izins.kode_izin WHERE tgl_presensi = $tanggal
+            ) data"),
+            function ($join) {
+                $join->on('karyawans.nik','=','data.nik');
+            }
+        );
+
+        if($getUser->hasRole('Admin Departemen')) {
+            $query->where('karyawans.kode_dept',$getKodeDept);
+            $query->where('karyawans.kode_cabang',$getKodeCabang);
+        } else if($getUser->hasRole('administrator')){
+            if(!empty($request->getKodeDept)) {
+                $query->where('karyawans.kode_dept',$request->getKodeDept);
+            }
+
+            if(!empty($request->getKodeCabang)) {
+                $query->where('karyawans.kode_cabang',$request->getKodeCabang);
+            }
         }
+
+        $query->orderBy('nama_lengkap');
+        $presensi = $query->get();
 
         return view('administrator.monitoring.getpresensi', compact('presensi'));
     }
@@ -452,11 +465,12 @@ class PresensiController extends Controller
     {
         # menerapkan role
         $getKodeDept = Auth::guard('user')->user()->kode_dept;
+        $getKodeCabang = Auth::guard('user')->user()->kode_cabang;
         $getUser = User::find(Auth::guard('user')->user()->id);
 
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         if($getUser->hasRole('Admin Departemen')){
-            $karyawan = Karyawan::where('kode_dept',$getKodeDept)->orderBy('nama_lengkap')->get();
+            $karyawan = Karyawan::where('kode_dept',$getKodeDept)->where('kode_cabang',$getKodeCabang)->orderBy('nama_lengkap')->get();
         } else {
             $karyawan = Karyawan::orderBy('nama_lengkap')->get();
         }
@@ -492,7 +506,8 @@ class PresensiController extends Controller
     {
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         $getDepartment = Department::all();
-        return view('administrator.laporan.rekap-presensi', compact('monthName','getDepartment'));
+        $cabang = Cabang::orderBy('nama_cabang')->get();
+        return view('administrator.laporan.rekap-presensi', compact('monthName','getDepartment','cabang'));
     }
 
     public function cetakrekap(Request $request)
@@ -500,6 +515,7 @@ class PresensiController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $kodeDept = $request->kode_dept;
+        $kodeCabang = $request->kode_cabang;
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         $dari = sprintf("%d-%02d-01", $tahun, $bulan);
         $sampai = date('Y-m-t', strtotime($dari));
@@ -561,6 +577,11 @@ class PresensiController extends Controller
         if(!empty($kodeDept)) {
             $query->where('kode_dept',$kodeDept);
         }
+
+        if(!empty($kodeCabang)) {
+            $query->where('kode_cabang',$kodeCabang);
+        }
+
         $query->orderBy('nama_lengkap');
         $rekap = $query->get();
         
@@ -578,10 +599,11 @@ class PresensiController extends Controller
     {
         # menerapkan role
         $getKodeDept = Auth::guard('user')->user()->kode_dept;
+        $getKodeCabang = Auth::guard('user')->user()->kode_cabang;
         $getUser = User::find(Auth::guard('user')->user()->id);
 
         $query = PengajuanIzin::query();
-        $query->select('kode_izin','tgl_izin_dari','tgl_izin_sampai','pengajuan_izins.nik','nama_lengkap','jabatan','status','status_approved','keterangan');
+        $query->select('kode_izin','tgl_izin_dari','tgl_izin_sampai','pengajuan_izins.nik','nama_lengkap','jabatan','status','status_approved','keterangan','karyawans.kode_dept','karyawans.kode_cabang');
         $query->join('karyawans','karyawans.nik','=','pengajuan_izins.nik');
 
         if(!empty($request->dari) && !empty($request->sampai)) {
@@ -600,14 +622,26 @@ class PresensiController extends Controller
             $query->where('pengajuan_izins.status_approved',$request->status_approved);
         }
 
+        if(!empty($request->kode_dept)){
+            $query->where('karyawans.kode_dept',$request->kode_dept);
+        }
+
+        if(!empty($request->kode_cabang)){
+            $query->where('karyawans.kode_cabang',$request->kode_cabang);
+        }
+
         if($getUser->hasRole('Admin Departemen')) {
             $query->where('karyawans.kode_dept',$getKodeDept);
+            $query->where('karyawans.kode_cabang',$getKodeCabang);
         }
 
         $query->orderBy('tgl_izin_dari','desc');
         $dataizin = $query->paginate(10);
         $dataizin->appends($request->all());
-        return view('administrator.data-pengajuan-izin.index', compact('dataizin'));
+
+        $department = Department::orderBy('kode_dept')->get();
+        $cabang = Cabang::orderBy('nama_cabang')->get();
+        return view('administrator.data-pengajuan-izin.index', compact('dataizin','department','cabang'));
     }
 
     public function approveizinsakit(Request $request)

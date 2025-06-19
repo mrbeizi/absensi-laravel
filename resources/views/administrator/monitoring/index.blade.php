@@ -35,6 +35,28 @@
                                     </div>
                                 </div>
                             </div>
+                            @role('administrator','user')
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <select name="kode_dept" id="kode_dept" class="form-select">
+                                        <option value="">- Pilih Department -</option>
+                                        @foreach($department as $dept)
+                                        <option {{ Request('kode_dept') == $dept->kode_dept ? 'selected' : '' }} value="{{ $dept->kode_dept }}">{{ $dept->nama_dept }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>                                        
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                        <option value="">- Pilih Kantor -</option>
+                                        @foreach($cabang as $cab)
+                                        <option {{ Request('kode_cabang') == $cab->kode_cabang ? 'selected' : '' }} value="{{ $cab->kode_cabang }}">{{ $cab->nama_cabang }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @endrole 
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -88,12 +110,16 @@
 
         function loadpresensi() {
             var tanggal = $('#tanggal').val();
+            var kode_dept = $('#kode_dept').val();
+            var kode_cabang = $('#kode_cabang').val();
             $.ajax({
                 type: "POST",
                 url: "{{route('get-presensi')}}",
                 data: {
                     _token: "{{ csrf_token() }}",
-                    tanggal: tanggal
+                    tanggal: tanggal,
+                    kode_dept: kode_dept,
+                    kode_cabang: kode_cabang
                 },
                 cache: false,
                 success:function(respond){
@@ -105,6 +131,15 @@
         $('#tanggal').change(function(e) {
             loadpresensi();
         });
+
+        $('#kode_dept').change(function(e) {
+            loadpresensi();
+        });
+
+        $('#kode_cabang').change(function(e) {
+            loadpresensi();
+        });
+
         loadpresensi();
     });
 </script>

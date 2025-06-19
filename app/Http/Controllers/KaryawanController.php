@@ -17,6 +17,7 @@ class KaryawanController extends Controller
     {
         # menerapkan role
         $getKodeDept = Auth::guard('user')->user()->kode_dept;
+        $getKodeCabang = Auth::guard('user')->user()->kode_cabang;
         $getUser = User::find(Auth::guard('user')->user()->id);
 
         $query = Karyawan::query();
@@ -38,7 +39,8 @@ class KaryawanController extends Controller
         }
 
         if($getUser->hasRole('Admin Departemen')) {
-            $query->where('departments.kode_dept',$getKodeDept);
+            $query->where('karyawans.kode_dept',$getKodeDept);
+            $query->where('karyawans.kode_cabang',$getKodeCabang);
         }
 
         $karyawan = $query->paginate(10);

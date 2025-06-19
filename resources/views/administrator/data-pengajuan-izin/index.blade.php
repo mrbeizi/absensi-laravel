@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/user -->
@@ -52,7 +52,7 @@
                                 <input type="text" value="{{Request('nik')}}" name="nik" id="nik" class="form-control" placeholder="NIK">
                             </div>  
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/user -->
@@ -61,7 +61,29 @@
                                 <input type="text" value="{{Request('nama_lengkap')}}" name="nama_lengkap" id="nama_lengkap" class="form-control" placeholder="Nama Karyawan">
                             </div>  
                         </div>
-                        <div class="col-3">
+                        @role('administrator','user')
+                        <div class="col-2">
+                            <div class="form-group">
+                                <select name="kode_dept" id="kode_dept" class="form-select">
+                                    <option value="">- Pilih Department -</option>
+                                    @foreach($department as $dept)
+                                    <option {{ Request('kode_dept') == $dept->kode_dept ? 'selected' : '' }} value="{{ $dept->kode_dept }}">{{ $dept->nama_dept }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>                                        
+                        <div class="col-2">
+                            <div class="form-group">
+                                <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                    <option value="">- Pilih Kantor -</option>
+                                    @foreach($cabang as $cab)
+                                    <option {{ Request('kode_cabang') == $cab->kode_cabang ? 'selected' : '' }} value="{{ $cab->kode_cabang }}">{{ $cab->nama_cabang }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        @endrole
+                        <div class="col-2">
                            <div class="form-group">
                              <select name="status_approved" id="status_approved" class="form-select">
                                 <option value="">- Pilih Status -</option>
@@ -71,7 +93,7 @@
                              </select>
                            </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit">
                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
@@ -105,9 +127,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Kode Izin</th>
                                     <th>NIK</th>
                                     <th>Nama Karyawan</th>
                                     <th>Jabatan</th>
+                                    <th>Dept - Kantor</th>
                                     <th>Tanggal Izin</th>
                                     <th>Status</th>
                                     <th>Keterangan</th>
@@ -119,9 +143,11 @@
                                 @foreach ($dataizin as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->kode_izin }}</td>
                                         <td>{{ $item->nik }}</td>
                                         <td>{{ $item->nama_lengkap }}</td>
                                         <td>{{ $item->jabatan }}</td>
+                                        <td>{{ $item->kode_dept }} &bull; {{ $item->kode_cabang }}</td>
                                         <td>{{ date("d-m-Y", strtotime($item->tgl_izin_dari)) }} s.d {{ date("d-m-Y", strtotime($item->tgl_izin_sampai)) }}</td>
                                         <td>{{ $item->status == "i" ? "Izin" : "Sakit" }}</td>
                                         <td>{{ $item->keterangan }}</td>

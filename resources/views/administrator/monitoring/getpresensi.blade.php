@@ -79,7 +79,7 @@
                 ];
                 @endphp
 
-                {!! $statusLabels[$item->status] ?? '<span class="badge bg-secondary">Tidak Diketahui</span>' !!}
+                {!! $statusLabels[$item->status] ?? '<span class="badge bg-secondary">Belum Absen</span>' !!}
             </td>
             <td></td>
             <td></td>
