@@ -324,4 +324,29 @@ class PerizinanController extends Controller
             }
         }
     }
+
+    public function getmaxcuti(Request $request)
+    {
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $kode_cuti = $request->kode_cuti;
+        $tgl_izin_dari = $request->tgl_izin_dari;
+        $tahun_cuti = date('Y', strtotime($tgl_izin_dari));
+        $cuti = MasterCuti::where('kode_cuti',$kode_cuti)->first();
+        
+        # pengecekan jumlah cuti yang sudah digunakan        
+        if($kode_cuti == "C01"){
+            $cutidigunakan = DB::table('presensis')
+                ->join('pengajuan_izins','pengajuan_izins.kode_izin','=','presensis.kode_izin')
+                ->where('presensis.status','c')
+                ->where('kode_cuti','C01')
+                ->whereRaw('YEAR(tgl_presensi)="'.$tahun_cuti.'"')
+                ->where('presensis.nik',$nik)
+                ->count();
+
+            $maxcuti = $cuti->jumlah_hari - $cutidigunakan;
+        } else {
+            $maxcuti = $cuti->jumlah_hari;
+        }
+        return $maxcuti;
+    }
 }

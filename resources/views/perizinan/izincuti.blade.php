@@ -41,7 +41,8 @@
                     <input type="text" name="tgl_izin_sampai" autocomplete="off" id="tgl_izin_sampai" data-date-format="yyyy/mm/dd" class="form-control datepicker" placeholder=" Sampai">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="jumlah_hari" id="jumlah_hari" class="form-control" autocomplete="off" placeholder="Jumlah hari" readonly>
+                    <input type="hidden" name="jumlah_hari" id="jumlah_hari" class="form-control" autocomplete="off" placeholder="Jumlah hari" readonly>
+                    <small><p id="infojumlahhari" class="text-info"></p></small>
                 </div>
                 <div class="form-group">
                     <select name="kode_cuti" id="kode_cuti" class="form-select custom-select">
@@ -50,6 +51,10 @@
                         <option value="{{$item->kode_cuti}}">{{$item->nama_cuti}}</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="max_cuti" id="max_cuti" class="form-control" autocomplete="off" readonly placeholder="Sisa cuti">
+                    <small><p id="infomaxcuti" class="text-info"></p></small>
                 </div>
                 <div class="form-group">
                     <textarea name="keterangan" id="keterangan" cols="30" rows="5" class="form-control" placeholder="Tulis keterangan"></textarea>
@@ -86,6 +91,7 @@
             var jumlah_hari = Diff_in_days + 1;
         }
         $('#jumlah_hari').val(jumlah_hari +" hari");
+        $('#infojumlahhari').html('Total hari ' + jumlah_hari + ' hari.');
     }
 
     $('#tgl_izin_dari, #tgl_izin_sampai').change(function(e) {
@@ -121,6 +127,8 @@
         var tgl_izin_sampai = $('#tgl_izin_sampai').val();
         var kode_cuti = $('#kode_cuti').val();
         var keterangan = $('#keterangan').val();
+        var jhari = $('#jumlah_hari').val();
+        var maxcuti = $('#max_cuti').val();
 
         if(tgl_izin_dari == "" || tgl_izin_sampai == ""){
             Swal.fire({
@@ -143,7 +151,45 @@
                 icon: 'warning'
             });
             return false;
-        } 
+        } else if(parseInt(jhari) > parseInt(maxcuti)){
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Pengajuan cuti tidak boleh lebih dari ' +maxcuti+ ' hari!',
+                icon: 'warning'
+            });
+            return false;
+        }
+    });
+
+    $('#kode_cuti').change(function(e){
+        e.preventDefault();
+        var kode_cuti = $(this).val();
+        var tgl_izin_dari = $('#tgl_izin_dari').val();
+
+        if(tgl_izin_dari == "" || tgl_izin_sampai == ""){
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Silahkan pilih tanggal terlebih dahulu',
+                icon: 'warning'
+            });
+            $('#kode_cuti').val("");
+        } else {
+            $.ajax({
+                url: "{{route('getmaxcuti')}}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    kode_cuti: kode_cuti,
+                    tgl_izin_dari: tgl_izin_dari
+                },
+                cache:false,
+                success: function(respond){
+                    $("#max_cuti").val(respond);
+                    $('#infomaxcuti').html('Maksimal cuti anda ' + respond + ' hari.');
+                }
+            });
+        }
+
     });
 </script>
 @endpush

@@ -159,6 +159,7 @@ Route::middleware(['auth:karyawan'])->group(function(){
     Route::post('/izincuti/store',[PerizinanController::class,'storeizincuti'])->name('store-izincuti');
     Route::get('/izincuti/{kode_izin}/edit',[PerizinanController::class, 'editizincuti'])->name('edit-izincuti');
     Route::post('/izincuti/{kode_izin}/update',[PerizinanController::class, 'updateizincuti'])->name('update-izincuti');
+    Route::post('/izincuti/getmaxcuti',[PerizinanController::class,'getmaxcuti'])->name('getmaxcuti');
 
     Route::get('/izin/{kode_izin}/showact',[PresensiController::class, 'showact']);
     Route::get('/izin/{kode_izin}/delete',[PresensiController::class, 'deletedataizin']);
