@@ -435,44 +435,33 @@ class PresensiController extends Controller
 
     public function getpresensi(Request $request)
     {
-        # menerapkan role
-        $getKodeDept = Auth::guard('user')->user()->kode_dept;
-        $getKodeCabang = Auth::guard('user')->user()->kode_cabang;
-        $getUser = User::find(Auth::guard('user')->user()->id);
-
         $tanggal = $request->tanggal;
 
         $query = Karyawan::query();
-        $query->select('karyawans.nik AS nik','nama_lengkap','karyawans.kode_dept','karyawans.kode_cabang','jam_in', 'jam_out', 'foto_in', 'foto_out', 'location_in', 'location_out', 'data.status', 'jam_masuk', 'nama_jam_kerja', 'jam_pulang', 'keterangan');
+        $query->selectRaw('karyawans.nik, nama_lengkap, karyawans.kode_dept, karyawans.kode_cabang, data.id, jam_in, jam_out, foto_in, foto_out, location_in, location_out, data.status, jam_masuk, nama_jam_kerja, jam_pulang, keterangan');
         $query->leftJoin(
             DB::raw("(
-            SELECT presensis.nik, jam_in, jam_out, foto_in, foto_out, location_in, location_out, presensis.status, jam_masuk, nama_jam_kerja, jam_pulang, keterangan
+            SELECT presensis.nik, presensis.id, jam_in, jam_out, foto_in, foto_out, location_in, location_out, presensis.status, jam_masuk, nama_jam_kerja, jam_pulang, keterangan
             FROM presensis 
             LEFT JOIN jam_kerjas ON presensis.kode_jam_kerja = jam_kerjas.kode_jam_kerja 
-            LEFT JOIN pengajuan_izins ON presensis.kode_izin = pengajuan_izins.kode_izin WHERE tgl_presensi = $tanggal
+            LEFT JOIN pengajuan_izins ON presensis.kode_izin = pengajuan_izins.kode_izin WHERE tgl_presensi = '$tanggal'
             ) data"),
             function ($join) {
                 $join->on('karyawans.nik','=','data.nik');
             }
         );
 
-        if($getUser->hasRole('Admin Departemen')) {
-            $query->where('karyawans.kode_dept',$getKodeDept);
-            $query->where('karyawans.kode_cabang',$getKodeCabang);
-        } else if($getUser->hasRole('administrator')){
-            if(!empty($request->getKodeDept)) {
-                $query->where('karyawans.kode_dept',$request->getKodeDept);
-            }
-
-            if(!empty($request->getKodeCabang)) {
-                $query->where('karyawans.kode_cabang',$request->getKodeCabang);
-            }
+        if(!empty($request->kode_dept)){
+            $query->where('karyawans.kode_dept', $request->kode_dept);
+        }
+        if(!empty($request->kode_cabang)){
+            $query->where('karyawans.kode_cabang', $request->kode_cabang);
         }
 
         $query->orderBy('nama_lengkap');
         $presensi = $query->get();
 
-        return view('administrator.monitoring.getpresensi', compact('presensi'));
+        return view('administrator.monitoring.getpresensi', compact('presensi','tanggal'));
     }
 
     public function tampilkanpeta(Request $request)
@@ -482,6 +471,54 @@ class PresensiController extends Controller
             ->join('karyawans','presensis.nik','=','karyawans.nik')
             ->first();
         return view('administrator.monitoring.showmap', compact('presensi'));
+    }
+
+    public function tampilkankoreksi(Request $request)
+    {
+        $nik = $request->nik;
+        $karyawan = Karyawan::where('nik',$nik)->first();
+        $tanggal = $request->tanggal;
+        $presensi = DB::table('presensis')->where('nik',$karyawan->nik)->where('tgl_presensi',$tanggal)->first();
+        $jamkerja = DB::table('jam_kerjas')->orderBy('kode_jam_kerja')->get();
+        return view('administrator.monitoring.showkoreksi', compact('karyawan','tanggal','jamkerja','presensi'));
+    }
+
+    public function simpankoreksi(Request $request)
+    {
+        $nik = $request->nik;
+        $tanggal = $request->tanggal;
+        $status = $request->status;
+        $jam_in = $status == "a" ? null : $request->jam_in;
+        $jam_out = $status == "a" ? null : $request->jam_out;
+        $kode_jam_kerja = $status == "a" ? null : $request->kode_jam_kerja;
+        
+        try {
+            $checkpresensi = DB::table('presensis')->where('nik',$nik)->where('tgl_presensi',$tanggal)->count();
+            if($checkpresensi > 0) {
+                DB::table('presensis')->where('nik',$nik)->where('tgl_presensi',$tanggal)->update([
+                    'jam_in' => $jam_in,
+                    'jam_out' => $jam_out,
+                    'kode_jam_kerja' => $kode_jam_kerja,
+                    'status' => $status,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            } else {
+                DB::table('presensis')->insert([
+                    'nik' => $nik,
+                    'tgl_presensi' => $tanggal,
+                    'jam_in' => $jam_in,
+                    'jam_out' => $jam_out,
+                    'kode_jam_kerja' => $kode_jam_kerja,
+                    'status' => $status,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+            return redirect()->back()->with(['success' => 'Data berhasil dikoreksi']);
+        } catch (\Exception $e) {
+            return redirect()->back()->with(['warning' => 'Data gagal dikoreksi']);
+        }
     }
 
     public function laporan(Request $request)

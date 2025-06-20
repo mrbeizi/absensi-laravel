@@ -92,10 +92,14 @@
                             <div class="presencecontent">
                                 <div class="iconpresence">
                                     @if($todayPresence != null)
-                                        @php
-                                            $path = Storage::url('uploads/absensi/'.$todayPresence->foto_in);
-                                        @endphp
-                                        <img src="{{url($path)}}" alt="image" class="imaged w44">
+                                        @if($todayPresence->foto_in != null )
+                                            @php
+                                                $path = Storage::url('uploads/absensi/'.$todayPresence->foto_in);
+                                            @endphp
+                                            <img src="{{url($path)}}" alt="image" class="imaged w44">
+                                        @else
+                                        <ion-icon name="camera"></ion-icon>
+                                        @endif
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
@@ -114,10 +118,14 @@
                             <div class="presencecontent">
                                 <div class="iconpresence">
                                     @if($todayPresence != null && $todayPresence->jam_out != null)
-                                        @php
-                                            $path = Storage::url('uploads/absensi/'.$todayPresence->foto_out);
-                                        @endphp
-                                        <img src="{{url($path)}}" alt="image" class="imaged w44">
+                                        @if($todayPresence->foto_out != null)
+                                            @php
+                                                $path = Storage::url('uploads/absensi/'.$todayPresence->foto_out);
+                                            @endphp
+                                            <img src="{{url($path)}}" alt="image" class="imaged w44">
+                                        @else
+                                         <ion-icon name="camera"></ion-icon>
+                                        @endif
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif

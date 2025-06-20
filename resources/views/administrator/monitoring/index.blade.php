@@ -21,6 +21,20 @@
     <div class="container-xl">
         <div class="row">
             <div class="col-12">
+                @if (Session::get('success'))
+                    <div class="alert alert-success">
+                        {{Session::get('success')}}
+                    </div>
+                @endif
+                @if (Session::get('warning'))
+                    <div class="alert alert-warning">
+                        {{Session::get('warning')}}
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -75,6 +89,7 @@
                                             <th>Foto</th>
                                             <th>Keterangan</th>
                                             <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="loadpresensi"></tbody>
@@ -95,6 +110,17 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="loadpeta"></div>        
+    </div>
+    </div>
+</div>
+<div class="modal modal-blur fade" id="modal-koreksipresensi" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Koreksi Presensi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="loadkoreksi"></div>        
     </div>
     </div>
 </div>
@@ -128,15 +154,15 @@
             });
         }
 
-        $('#tanggal').change(function(e) {
+        $('#tanggal').change(function() {
             loadpresensi();
         });
 
-        $('#kode_dept').change(function(e) {
+        $('#kode_dept').change(function() {
             loadpresensi();
         });
 
-        $('#kode_cabang').change(function(e) {
+        $('#kode_cabang').change(function() {
             loadpresensi();
         });
 
