@@ -100,6 +100,9 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/jamkerja/store',[KonfigurasiController::class,'simpanjamkerja']);
     Route::post('/jamkerja/edit',[KonfigurasiController::class,'editjamkerja']);
     Route::post('/jamkerja/{kode_jamker}/destroy',[KonfigurasiController::class,'destroyjamker']);
+    Route::post('/jamkerja/simpan-pertanggal',[KonfigurasiController::class, 'simpanpertanggal'])->name('simpan-pertanggal');
+    Route::get('/jamkerja/{nik}/{bulan}/{tahun}/show',[KonfigurasiController::class, 'showpertanggal']);
+    Route::post('/jamkerja/hapus',[KonfigurasiController::class, 'hapuspertanggal'])->name('hapuspertanggal');
 
     // Setting Jam Kerja
     Route::get('/karyawan/{nik}/setjamkerja',[KonfigurasiController::class,'setjamkerja']);

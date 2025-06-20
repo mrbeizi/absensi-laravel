@@ -107,14 +107,15 @@ class KonfigurasiController extends Controller
 
     public function setjamkerja($nik)
     {
+        $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         $karyawan = Karyawan::where('nik',$nik)->first();
         $jamkerja = JamKerja::orderBy('nama_jam_kerja')->get();
         $cekexist = KonfigurasiJamKerja::where('nik',$nik)->count();
         if($cekexist > 0){
             $data = KonfigurasiJamKerja::where('nik',$nik)->get();
-            return view('administrator.konfigurasi.editsetjamkerja', compact('karyawan','jamkerja','data'));
+            return view('administrator.konfigurasi.editsetjamkerja', compact('karyawan','jamkerja','data','monthName'));
         } else {
-            return view('administrator.konfigurasi.setjamkerja', compact('karyawan','jamkerja'));
+            return view('administrator.konfigurasi.setjamkerja', compact('karyawan','jamkerja','monthName'));
         }
     }
 
@@ -142,6 +143,53 @@ class KonfigurasiController extends Controller
            return redirect('/karyawan')->with(['warning' => 'Data gagal disimpan']);
         }
         
+    }
+
+    public function simpanpertanggal(Request $request)
+    {
+        $nik = $request->nik;
+        $tanggal = $request->tanggal;
+        $kode_jamker = $request->kd_jamker;
+
+        $data = [
+            'nik' => $nik,
+            'tanggal' => $tanggal,
+            'kode_jam_kerja' => $kode_jamker,
+            'created_at' => now(),
+            'updated_at' => now()
+        ];
+
+        try {
+            DB::table('konfigurasi_jam_kerja_pertanggals')->insert($data);
+            return 1;
+        } catch (\Exception $e) {
+           return 0;
+        }
+    }
+
+    public function showpertanggal($nik, $bulan, $tahun)
+    {
+        $datas = DB::table('konfigurasi_jam_kerja_pertanggals')
+            ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_pertanggals.kode_jam_kerja')
+            ->select('konfigurasi_jam_kerja_pertanggals.*','nama_jam_kerja')
+            ->where('nik',$nik)
+            ->whereRaw('MONTH(tanggal)="'.$bulan.'"')
+            ->whereRaw('YEAR(tanggal)="'.$tahun.'"')
+            ->get();
+        return view('administrator.konfigurasi.showjamkerjapertanggal', compact('datas','nik','bulan','tahun'));
+    }
+
+    public function hapuspertanggal(Request $request)
+    {
+        $nik = $request->nik;
+        $tanggal = $request->tanggal;
+
+        try {
+            DB::table('konfigurasi_jam_kerja_pertanggals')->where('nik',$nik)->where('tanggal',$tanggal)->delete();
+            return 1;
+        } catch (\Throwable $th) {
+            return 0;
+        }
     }
 
     public function updatesetjamkerja(Request $request)

@@ -87,20 +87,32 @@ class PresensiController extends Controller
 
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $office_loc  = Cabang::where('kode_cabang',$kode_cabang)->first();
-        $jamKerja    = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')
-            ->where('nik',$nik)
-            ->where('hari',$namaHari)
-            ->first();
 
-        # pengecekan jadwal kerja tiap departemen
-        if($jamKerja == null) {
-            $jamKerja = KonfigurasiJamKerjaDepartmentDetail::join('konfigurasi_jam_kerja_departments','konfigurasi_jam_kerja_departments.kode_jam_kerja_dept','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja_dept')
-                ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja')
-                ->where('kode_dept',$kode_dept)
-                ->where('kode_cabang',$kode_cabang)
+        # pengecekan jadwal kerja berdasarkan tanggal
+        $jamKerja = DB::table('konfigurasi_jam_kerja_pertanggals')
+            ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_pertanggals.kode_jam_kerja')
+            ->where('nik',$nik)
+            ->where('tanggal',$today)
+            ->first();
+        
+        # jika kosong, lanjut pengecekan jadwal berdasarkan hari
+        if($jamKerja == null){
+            $jamKerja    = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')
+                ->where('nik',$nik)
                 ->where('hari',$namaHari)
                 ->first();
+
+            # pengecekan jadwal kerja tiap departemen
+            if($jamKerja == null) {
+                $jamKerja = KonfigurasiJamKerjaDepartmentDetail::join('konfigurasi_jam_kerja_departments','konfigurasi_jam_kerja_departments.kode_jam_kerja_dept','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja_dept')
+                    ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja')
+                    ->where('kode_dept',$kode_dept)
+                    ->where('kode_cabang',$kode_cabang)
+                    ->where('hari',$namaHari)
+                    ->first();
+            }
         }
+
 
         if($jamKerja == null){
             return view('presensi.notif-jadwal');
@@ -168,19 +180,30 @@ class PresensiController extends Controller
         
         # Cek Jam Kerja
         $namaHari = $this->getHari(date('D', strtotime($tgl_presensi)));
-        $jamKerja = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')
+
+        # pengecekan jadwal kerja berdasarkan tanggal
+        $jamKerja = DB::table('konfigurasi_jam_kerja_pertanggals')
+            ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_pertanggals.kode_jam_kerja')
             ->where('nik',$nik)
-            ->where('hari',$namaHari)
+            ->where('tanggal',$today)
             ->first();
 
-        # pengecekan jadwal kerja tiap departemen
-        if($jamKerja == null) {
-            $jamKerja = KonfigurasiJamKerjaDepartmentDetail::join('konfigurasi_jam_kerja_departments','konfigurasi_jam_kerja_departments.kode_jam_kerja_dept','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja_dept')
-                ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja')
-                ->where('kode_dept',$kode_dept)
-                ->where('kode_cabang',$kode_cabang)
+        # jika kosong, lanjut pengecekan jadwal berdasarkan hari
+        if($jamKerja == null){
+            $jamKerja = KonfigurasiJamKerja::join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerjas.kode_jam_kerja')
+                ->where('nik',$nik)
                 ->where('hari',$namaHari)
                 ->first();
+
+            # jika kosong, lanjut pengecekan jadwal kerja tiap departemen            
+            if($jamKerja == null) {
+                $jamKerja = KonfigurasiJamKerjaDepartmentDetail::join('konfigurasi_jam_kerja_departments','konfigurasi_jam_kerja_departments.kode_jam_kerja_dept','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja_dept')
+                    ->join('jam_kerjas','jam_kerjas.kode_jam_kerja','=','konfigurasi_jam_kerja_department_details.kode_jam_kerja')
+                    ->where('kode_dept',$kode_dept)
+                    ->where('kode_cabang',$kode_cabang)
+                    ->where('hari',$namaHari)
+                    ->first();
+            }
         }
 
         # pengecekan jadwal lintas hari
