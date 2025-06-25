@@ -123,6 +123,19 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/master-cuti/store',[MasterCutiController::class,'simpanmastercuti']);
     Route::post('/master-cuti/edit',[MasterCutiController::class,'editmastercuti']);
     Route::post('/master-cuti/{kode_cuti}/destroy',[MasterCutiController::class,'destroymastercuti']);
+
+    // Hari Libur
+    Route::get('hari-libur',[KonfigurasiController::class,'harilibur'])->name('hari-libur');
+    Route::post('/hari-libur/store',[KonfigurasiController::class,'simpanharilibur']);
+    Route::post('/hari-libur/edit',[KonfigurasiController::class,'editharilibur']);
+    Route::post('/hari-libur/{kode_libur}/update',[KonfigurasiController::class,'updateharilibur']);
+    Route::post('/hari-libur/{kode_libur}/destroy',[KonfigurasiController::class,'hapusharilibur']);
+    Route::get('/hari-libur/setharilibur/{kode_libur}/karyawan',[KonfigurasiController::class,'setharilibur']);
+    Route::get('/hari-libur/setharilibur/{kode_libur}/listkaryawan',[KonfigurasiController::class,'setlistkaryawanlibur']);
+    Route::get('/hari-libur/setharilibur/{kode_libur}/getlistkaryawan',[KonfigurasiController::class,'getlistkaryawanlibur']);
+    Route::post('/hari-libur/setharilibur/simpankaryawanlibur',[KonfigurasiController::class,'simpankaryawanlibur'])->name('simpan-karyawan-libur');
+    Route::post('/hari-libur/setharilibur/hapuskaryawanlibur',[KonfigurasiController::class,'hapuskaryawanlibur'])->name('hapus-karyawan-libur');
+    Route::get('/hari-libur/setharilibur/{kode_libur}/getkaryawanlibur',[KonfigurasiController::class,'getkaryawanlibur']);
 });
 
 Route::middleware(['auth:karyawan'])->group(function(){

@@ -83,7 +83,9 @@ class PresensiController extends Controller
         $namaHari    = $this->getHari(date('D', strtotime($today)));
 
         $kode_dept   = Auth::guard('karyawan')->user()->kode_dept;
-        $check       = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]])->count();       
+        $pres        = DB::table('presensis')->where([['tgl_presensi',$today],['nik',$nik]]);        
+        $check       = $pres->count();
+        $datapres    = $pres->first();
 
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $office_loc  = Cabang::where('kode_cabang',$kode_cabang)->first();
@@ -113,8 +115,9 @@ class PresensiController extends Controller
             }
         }
 
-
-        if($jamKerja == null){
+        if($datapres != null && $datapres->status != "h") {
+            return view('presensi.notif-izin');
+        } else if($jamKerja == null){
             return view('presensi.notif-jadwal');
         } else {
             return view('presensi.index', compact('check','office_loc','jamKerja','today'));
@@ -663,7 +666,7 @@ class PresensiController extends Controller
         $getUser = User::find(Auth::guard('user')->user()->id);
 
         $query = PengajuanIzin::query();
-        $query->select('kode_izin','tgl_izin_dari','tgl_izin_sampai','pengajuan_izins.nik','nama_lengkap','jabatan','status','status_approved','keterangan','karyawans.kode_dept','karyawans.kode_cabang');
+        $query->select('kode_izin','tgl_izin_dari','tgl_izin_sampai','pengajuan_izins.nik','docs_sid','nama_lengkap','jabatan','status','status_approved','keterangan','karyawans.kode_dept','karyawans.kode_cabang');
         $query->join('karyawans','karyawans.nik','=','pengajuan_izins.nik');
 
         if(!empty($request->dari) && !empty($request->sampai)) {
