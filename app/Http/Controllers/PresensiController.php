@@ -12,6 +12,7 @@ use App\Models\PengajuanIzin;
 use App\Models\KonfigurasiJamKerja;
 use App\Models\KonfigurasiJamKerjaDepartmentDetail;
 use App\Models\User;
+use App\Models\HariLibur;
 use Auth;
 use DB;
 
@@ -583,6 +584,10 @@ class PresensiController extends Controller
         $dari = sprintf("%d-%02d-01", $tahun, $bulan);
         $sampai = date('Y-m-t', strtotime($dari));
 
+        // Mencari data libur karyawan
+        $datalibur = getHariLiburKaryawan($dari, $sampai);
+        $ketlibur = HariLibur::whereBetween('tgl_libur',[$dari, $sampai])->get();
+
         // Membuat array tanggal dari awal hingga akhir bulan
         $rangeTanggal = [];
         $tempTanggal = $dari;
@@ -655,7 +660,7 @@ class PresensiController extends Controller
                 header("Content-Disposition: attachment; filename=Rekap Presensi $time.xls");
             }
 
-        return view('administrator.laporan.cetakrekap', compact('bulan','tahun','monthName','rekap','rangeTanggal','jumlahHari'));
+        return view('administrator.laporan.cetakrekap', compact('bulan','tahun','monthName','rekap','rangeTanggal','jumlahHari','datalibur','ketlibur'));
     }
 
     public function dataizinsakit(Request $request)

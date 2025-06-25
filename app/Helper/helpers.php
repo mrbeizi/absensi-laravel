@@ -51,3 +51,32 @@
     
         return $jam ."h ". $menit ."m";
     }
+
+    function getHariLiburKaryawan($dari, $sampai)
+    {
+        $datas = DB::table('hari_libur_details')->join('hari_liburs','hari_liburs.kode_libur','=','hari_libur_details.kode_libur')
+            ->whereBetween('tgl_libur',[$dari, $sampai])
+            ->get();
+        $karyawanlibur = [];
+        foreach($datas as $item){
+            $karyawanlibur[] = [
+                'nik' => $item->nik,
+                'tgl_libur' => $item->tgl_libur
+            ];
+        }
+        return $karyawanlibur;
+    }
+
+    function checkLiburKaryawan($array, $search_list)
+    {
+        $result = array();
+        foreach($array as $key => $value){
+            foreach($search_list as $k => $v){
+                if(!isset($value[$k]) || $value[$k] != $v) {
+                    continue 2;
+                }
+            }
+            $result[] = $value;
+        }
+        return $result;
+    }

@@ -103,7 +103,15 @@
             @for ($i = 1; $i <= $jumlahHari; $i++)
                 @php
                     $tgl = "tgl_".$i;
+                    $timestamp = mktime(0, 0, 0, $bulan, $i, $tahun);
+                    $namaHari = strftime('%A', $timestamp);
+                    $tgl_pres = $rangeTanggal[$i-1];
                     $datapresensi = explode("|", $res->{$tgl});
+                    $search_items = [
+                        'nik' => $res->nik,
+                        'tgl_libur' => $tgl_pres
+                    ];
+                    $checklibur = checkLiburKaryawan($datalibur, $search_items);
                     if($res->{$tgl} != NULL) {
                         $status = $datapresensi[2];
                     } else {
@@ -130,6 +138,14 @@
                         $jAbsen += 1;
                         $color = "red";
                     }
+                    if(!empty($checklibur)){
+                        $jAbsen -= 1;
+                        $color = "green";
+                    }
+                    if($namaHari == "Sunday"){
+                        $jAbsen -= 1;
+                        $color = "black";
+                    }
                 @endphp                
                 <td style="background-color: {{$color}}">{{$status}}</td>
             @endfor
@@ -143,6 +159,12 @@
 
         @endforeach
     </table>
+    <small><p>Keterangan Libur:</p></small>
+    <ol>
+        @foreach($ketlibur as $ket)
+            <small><li>{{date('d-m-Y', strtotime($ket->tgl_libur))}} &ndash; {{$ket->keterangan}}</li></small>
+        @endforeach
+    </ol>
 
     <table width="100%" style="margin-top: 100px;">
         <tr>
