@@ -440,6 +440,11 @@ class PresensiController extends Controller
 
     public function getpresensi(Request $request)
     {
+        # menerapkan role
+        $getKodeDept = Auth::guard('user')->user()->kode_dept;
+        $getKodeCabang = Auth::guard('user')->user()->kode_cabang;
+        $getUser = User::find(Auth::guard('user')->user()->id);
+
         $tanggal = $request->tanggal;
 
         $query = Karyawan::query();
@@ -455,6 +460,10 @@ class PresensiController extends Controller
                 $join->on('karyawans.nik','=','data.nik');
             }
         );
+
+        if($getUser->hasRole('Admin Departemen')){
+            $query->where('karyawans.kode_dept',$getKodeDept)->where('karyawans.kode_cabang', $getKodeCabang);
+        }
 
         if(!empty($request->kode_dept)){
             $query->where('karyawans.kode_dept', $request->kode_dept);
