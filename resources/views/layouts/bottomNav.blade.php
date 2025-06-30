@@ -12,13 +12,23 @@
             <strong>History</strong>
         </div>
     </a>
-    <a href="{{route('camera')}}" class="item">
-        <div class="col">
-            <div class="action-button large">
-                <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+    @if(Auth::guard('karyawan')->user()->status_jam_kerja == '1')
+        <a href="{{route('camera',['code' => 'null'])}}" class="item">
+            <div class="col">
+                <div class="action-button large">
+                    <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+                </div>
             </div>
-        </div>
-    </a>
+        </a>
+    @else
+        <a href="{{route('pilih-jam-kerja')}}" class="item">
+            <div class="col">
+                <div class="action-button large">
+                    <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+                </div>
+            </div>
+        </a>
+    @endif
     <a href="{{route('presensi-izin')}}" class="item {{request()->is('presensi-izin') ? 'active' : ''}}">
         <div class="col">
             <ion-icon name="document-text-outline" role="img" class="md hydrated" aria-label="document text outline"></ion-icon>

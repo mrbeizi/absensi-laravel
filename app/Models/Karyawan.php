@@ -25,7 +25,8 @@ class Karyawan extends Authenticatable
         'foto',
         'kode_dept',
         'kode_cabang',
-        'status_loc'
+        'status_loc',
+        'status_jam_kerja'
     ];
 
     protected $hidden = [

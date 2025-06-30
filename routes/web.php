@@ -60,6 +60,7 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/karyawan/{nik}/destroy',[KaryawanController::class,'destroy']);
     Route::get('/karyawan/{nik}/resetpassword',[KaryawanController::class,'resetpassword']);
     Route::get('karyawan/{nik}/switch-location',[KaryawanController::class, 'switchlocation'])->name('switch-status-loc');
+    Route::get('karyawan/{nik}/switch-jam-kerja',[KaryawanController::class, 'switchjamker'])->name('switch-status-jamker');
 
     // Department
     Route::get('/department',[DepartmentController::class, 'index'])->name('index-department');
@@ -142,8 +143,9 @@ Route::middleware(['auth:user'])->group(function(){
 Route::middleware(['auth:karyawan'])->group(function(){
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
     Route::get('/proses-logout',[AuthController::class,'prosesLogout'])->name('proses-logout');
-    Route::get('/camera',[PresensiController::class,'index'])->name('camera');
+    Route::get('/camera/{code}/index',[PresensiController::class,'index'])->name('camera');
     Route::post('/camera-snap',[PresensiController::class,'store'])->name('camera-snap');
+    Route::get('/pilih-jam-kerja',[PresensiController::class,'pilihjamkerja'])->name('pilih-jam-kerja');
 
     # edit profile
     Route::get('/edit-profile',[PresensiController::class,'editProfile'])->name('edit-profile');

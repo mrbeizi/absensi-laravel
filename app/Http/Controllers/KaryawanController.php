@@ -189,4 +189,24 @@ class KaryawanController extends Controller
         }
     }
 
+    public function switchjamker($nik)
+    {
+        try {
+            $karyawan = Karyawan::where('nik',$nik)->first();
+            $status = $karyawan->status_jam_kerja;
+            if($status == '1'){
+                Karyawan::where('nik',$nik)->update([
+                    'status_jam_kerja' => '0'
+                ]);
+            } else {
+                Karyawan::where('nik',$nik)->update([
+                    'status_jam_kerja' => '1'
+                ]);
+            }
+            return redirect()->back()->with(['success' => 'Status jam kerja berhasil diubah']);
+        } catch (\Exception $e) {
+           return redirect()->back()->with(['warning' => 'Status jam kerja gagal diubah']);
+        }
+    }
+
 }
