@@ -591,8 +591,23 @@ class PresensiController extends Controller
         $kodeDept = $request->kode_dept;
         $kodeCabang = $request->kode_cabang;
         $monthName = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-        $dari = sprintf("%d-%02d-01", $tahun, $bulan);
-        $sampai = date('Y-m-t', strtotime($dari));
+        
+        // Misal periode bulan dimulai dari tgl 20-an, maka perlu diubah menjadi:
+        if($bulan == 1){
+            $bulanlalu = 12;
+            $tahunlalu = $tahun - 1;
+        } else {
+            $bulanlalu = $bulan - 1;
+            $tahunlalu = $tahun;
+        }
+
+        // Maka data "dari" dan "sampai" juga ikut berubah
+        # $dari = sprintf("%d-%02d-01", $tahun, $bulan);
+        # $sampai = date('Y-m-t', strtotime($dari));
+
+        # menjadi
+        $dari = $tahunlalu."-".$bulanlalu."-21";
+        $sampai = $tahun."-".$bulan."-20";
 
         // Mencari data libur karyawan
         $datalibur = getHariLiburKaryawan($dari, $sampai);
