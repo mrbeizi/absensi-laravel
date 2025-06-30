@@ -58,7 +58,7 @@
                                         <div class="col-3">
                                             <div class="form-group">
                                                 <select name="kode_dept" id="kode_dept" class="form-select">
-                                                    <option value="">-- Pilih Department --</option>
+                                                    <option value="">- Pilih Department -</option>
                                                     @foreach($department as $dept)
                                                     <option {{ Request('kode_dept') == $dept->kode_dept ? 'selected' : '' }} value="{{ $dept->kode_dept }}">{{ $dept->nama_dept }}</option>
                                                     @endforeach
@@ -68,7 +68,7 @@
                                         <div class="col-3">
                                             <div class="form-group">
                                                 <select name="kd_cabang" id="kd_cabang" class="form-select">
-                                                    <option value="">-- Pilih Kantor --</option>
+                                                    <option value="">- Pilih Kantor -</option>
                                                     @foreach($datacabang as $cab)
                                                     <option {{ Request('kd_cabang') == $cab->kode_cabang ? 'selected' : '' }} value="{{ $cab->kode_cabang }}">{{ $cab->nama_cabang }}</option>
                                                     @endforeach
@@ -98,6 +98,7 @@
                                             <th>Foto</th>
                                             <th>Departemen</th>
                                             <th>Kantor</th>
+                                            <th>Lokasi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -121,6 +122,17 @@
                                             </td>
                                             <td>{{$item->nama_dept}}</td>
                                             <td>{{$item->nama_cabang}}</td>
+                                            <td>
+                                                @if($item->status_loc == '1')
+                                                <a href="{{route('switch-status-loc',['nik' => $item->nik])}}">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-lock text-danger"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
+                                                </a>
+                                                @else
+                                                <a href="{{route('switch-status-loc',['nik' => $item->nik])}}">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-lock-open text-success"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M8 11v-5a4 4 0 0 1 8 0" /></svg>
+                                                </a>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="/karyawan/{{ $item->nik }}/setjamkerja" class="setting text-primary">

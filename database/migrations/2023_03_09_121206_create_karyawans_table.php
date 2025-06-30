@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('foto',100)->nullable();
             $table->string('kode_dept',10)->nullable();
             $table->string('kode_cabang',10)->nullable();
+            $table->string('status_loc',1)->default(1);
             $table->string('password',255)->nullable();
             $table->string('remember_token',255)->nullable();
             $table->timestamps();

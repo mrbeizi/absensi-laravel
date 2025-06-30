@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             JamKerjaSeeder::class,
             LokasiKantorSeeder::class,
             MasterCutiSeeder::class,
+            RoleSeeder::class,
+            ModelHasRoleSeeder::class,
         ]);
     }
 }

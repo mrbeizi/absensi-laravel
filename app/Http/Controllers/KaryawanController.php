@@ -169,4 +169,24 @@ class KaryawanController extends Controller
         }
     }
 
+    public function switchlocation($nik)
+    {
+        try {
+            $karyawan = Karyawan::where('nik',$nik)->first();
+            $status = $karyawan->status_loc;
+            if($status == '1'){
+                Karyawan::where('nik',$nik)->update([
+                    'status_loc' => '0'
+                ]);
+            } else {
+                Karyawan::where('nik',$nik)->update([
+                    'status_loc' => '1'
+                ]);
+            }
+            return redirect()->back()->with(['success' => 'Status lokasi berhasil diupdate']);
+        } catch (\Exception $e) {
+           return redirect()->back()->with(['warning' => 'Status lokasi gagal diupdate']);
+        }
+    }
+
 }

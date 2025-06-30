@@ -128,6 +128,7 @@ class PresensiController extends Controller
     public function store(Request $request)
     {
         $nik          = Auth::guard('karyawan')->user()->nik;
+        $status_loc   = Auth::guard('karyawan')->user()->status_loc;
 
         $today       = date('Y-m-d');
 
@@ -215,8 +216,8 @@ class PresensiController extends Controller
         $jam_pulang = $today . "" . $jam;
         $jamker_pulang = $tgl_pulang . "" . $jamKerja->jam_pulang;
 
-        # Check radius
-        if($radius > $office_loc->radius){
+        # Check radius and status location (lock or unlock)
+        if($status_loc == '1' && $radius > $office_loc->radius){
             echo "error|Sorry, you're out of radius ".$radius." meters|radius";
         } else {
             if ($check > 0){ # Check data exist or not

@@ -91,7 +91,7 @@
                                             <th>#</th>
                                             <th>Kode</th>
                                             <th>Tanggal</th>
-                                            <th>Cabang</th>
+                                            <th>Kantor</th>
                                             <th>Keterangan</th>
                                             <th>Aksi</th>
                                         </tr>
